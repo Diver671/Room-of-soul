@@ -6,14 +6,14 @@
     <title>Комната Души — Версия 2.0</title>
     <style>
         :root {
-            --bg-color: #0b0d12;
-            --card-bg: #141722;
-            --accent-amber: #f5a623;
-            --accent-amber-hover: #ffb833;
-            --text-main: #e2e8f0;
-            --text-muted: #94a3b8;
-            --border-color: #242b3d;
-            --danger: #ff5252;
+            --bg-deep: #080a0f;
+            --surface-velvet: #131722;
+            --surface-card: #1c2230;
+            --amber-glow: #f5a623;
+            --amber-hover: #ffb833;
+            --text-main: #f0f4f8;
+            --text-muted: #8c9bae;
+            --border-velvet: #2a344a;
         }
 
         * {
@@ -24,344 +24,372 @@
         }
 
         body {
-            background-color: var(--bg-color);
+            background-color: var(--bg-deep);
             color: var(--text-main);
             min-height: 100vh;
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 16px;
-        }
-
-        .container {
-            width: 100%;
-            max-width: 720px;
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
+            padding: 20px;
+            overflow-x: hidden;
         }
 
         header {
             text-align: center;
-            margin-bottom: 8px;
+            margin-bottom: 20px;
         }
 
         header h1 {
-            font-size: 1.6rem;
-            color: var(--accent-amber);
-            margin-bottom: 4px;
-            letter-spacing: 0.5px;
+            font-size: 1.8rem;
+            color: var(--amber-glow);
+            margin-bottom: 6px;
+            letter-spacing: 0.8px;
+            text-shadow: 0 0 15px rgba(245, 166, 35, 0.3);
         }
 
         header p {
             color: var(--text-muted);
-            font-size: 0.9rem;
+            font-size: 0.95rem;
         }
 
-        .panel {
-            background-color: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 16px;
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
-        }
-
-        .panel h2 {
-            font-size: 1.05rem;
-            margin-bottom: 12px;
-            color: var(--accent-amber);
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .category-title {
-            font-size: 0.85rem;
-            color: var(--text-muted);
-            margin: 10px 0 6px 0;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .symbols-grid {
+        .app-container {
+            width: 100%;
+            max-width: 900px;
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
-            gap: 10px;
+            grid-template-columns: 280px 1fr;
+            gap: 20px;
         }
 
-        .symbol-card {
-            background: #1a1f2e;
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            padding: 10px;
-            text-align: center;
+        @media (max-width: 768px) {
+            .app-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .sidebar {
+            background-color: var(--surface-velvet);
+            border: 1px solid var(--border-velvet);
+            border-radius: 16px;
+            padding: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .sidebar h3 {
+            font-size: 1rem;
+            color: var(--amber-glow);
+            border-bottom: 1px solid var(--border-velvet);
+            padding-bottom: 8px;
+        }
+
+        .items-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .item-card {
+            background: var(--surface-card);
+            border: 1px solid var(--border-velvet);
+            border-radius: 10px;
+            padding: 10px 14px;
             cursor: pointer;
             transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
             user-select: none;
         }
 
-        .symbol-card:hover {
-            border-color: var(--accent-amber);
-            transform: translateY(-2px);
+        .item-card:hover {
+            border-color: var(--amber-glow);
+            background: #242d42;
+            transform: translateY(-1px);
         }
 
-        .symbol-card.selected {
-            background: rgba(245, 166, 35, 0.12);
-            border-color: var(--accent-amber);
-        }
-
-        .symbol-card .name {
-            font-size: 0.9rem;
-            font-weight: 500;
-            margin-bottom: 2px;
-        }
-
-        .symbol-card .desc {
-            font-size: 0.75rem;
-            color: var(--text-muted);
-        }
-
-        .canvas-area {
-            background: #0d0f17;
-            border: 2px dashed var(--border-color);
-            border-radius: 12px;
-            min-height: 200px;
+        .room-wrapper {
+            background-color: var(--surface-velvet);
+            border: 1px solid var(--border-velvet);
+            border-radius: 16px;
+            padding: 20px;
             display: flex;
-            flex-wrap: wrap;
-            align-content: flex-start;
-            gap: 10px;
-            padding: 14px;
-            position: relative;
-        }
-
-        .canvas-placeholder {
-            color: var(--text-muted);
-            margin: auto;
-            text-align: center;
-            font-size: 0.9rem;
-            pointer-events: none;
-        }
-
-        .placed-item {
-            background: #1a1f2e;
-            border: 1px solid var(--accent-amber);
-            border-radius: 8px;
-            padding: 8px 12px;
-            font-size: 0.85rem;
-            display: flex;
+            flex-direction: column;
             align-items: center;
-            gap: 8px;
-            animation: fadeIn 0.3s ease;
+            justify-content: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+            position: relative;
+            min-height: 450px;
         }
 
-        .placed-item button {
-            background: none;
-            border: none;
+        /* Та самая круглая комната */
+        .circle-room {
+            width: 340px;
+            height: 340px;
+            border-radius: 50%;
+            background: radial-gradient(circle, #10141f 0%, #080a0f 85%);
+            border: 2px solid var(--amber-glow);
+            box-shadow: inset 0 0 30px rgba(0, 0, 0, 0.8), 0 0 20px rgba(245, 166, 35, 0.15);
+            position: relative;
+            margin: 20px auto;
+            cursor: crosshair;
+        }
+
+        .room-center {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 6px;
+            height: 6px;
+            background-color: rgba(245, 166, 35, 0.3);
+            border-radius: 50%;
+        }
+
+        .placed-element {
+            position: absolute;
+            background: var(--surface-card);
+            border: 1px solid var(--amber-glow);
+            color: var(--text-main);
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            cursor: grab;
+            user-select: none;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+            transform: translate(-50%, -50%);
+            white-space: nowrap;
+            transition: border-color 0.2s;
+        }
+
+        .placed-element:active {
+            cursor: grabbing;
+        }
+
+        .placed-element:hover {
+            background: #28324a;
+        }
+
+        .hint {
+            font-size: 0.8rem;
             color: var(--text-muted);
-            cursor: pointer;
-            font-size: 1rem;
-            line-height: 1;
-        }
-
-        .placed-item button:hover {
-            color: var(--danger);
-        }
-
-        .btn {
-            background-color: var(--accent-amber);
-            color: #0b0d12;
-            border: none;
-            border-radius: 8px;
-            padding: 12px 20px;
-            font-size: 0.95rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background 0.2s;
-            width: 100%;
-        }
-
-        .btn:hover {
-            background-color: var(--accent-amber-hover);
-        }
-
-        .btn-secondary {
-            background-color: transparent;
-            color: var(--accent-amber);
-            border: 1px solid var(--accent-amber);
+            text-align: center;
             margin-top: 10px;
         }
 
-        .btn-secondary:hover {
-            background-color: rgba(245, 166, 35, 0.1);
+        .actions-panel {
+            grid-column: 1 / -1;
+            background-color: var(--surface-velvet);
+            border: 1px solid var(--border-velvet);
+            border-radius: 16px;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .btn {
+            background-color: var(--amber-glow);
+            color: #080a0f;
+            border: none;
+            border-radius: 10px;
+            padding: 12px 24px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .btn:hover {
+            background-color: var(--amber-hover);
+            box-shadow: 0 0 15px rgba(245, 166, 35, 0.4);
         }
 
         .result-box {
-            background: var(--card-bg);
-            border: 1px solid var(--accent-amber);
+            margin-top: 16px;
+            text-align: left;
+            background: var(--surface-card);
+            border: 1px solid var(--amber-glow);
             border-radius: 12px;
             padding: 16px;
             display: none;
-            animation: fadeIn 0.4s ease;
         }
 
-        .result-box h3 {
-            color: var(--accent-amber);
-            font-size: 1.05rem;
+        .result-box h4 {
+            color: var(--amber-glow);
             margin-bottom: 6px;
-            margin-top: 12px;
-        }
-
-        .result-box h3:first-child {
-            margin-top: 0;
+            font-size: 1rem;
         }
 
         .result-box p {
-            line-height: 1.45;
-            color: var(--text-main);
             font-size: 0.9rem;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(4px); }
-            to { opacity: 1; transform: translateY(0); }
+            line-height: 1.4;
+            color: var(--text-main);
+            margin-bottom: 12px;
         }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <header>
-            <h1>Комната Души</h1>
-            <p>Системная расстановка состояния (Версия 2.0)</p>
-        </header>
+    <header>
+        <h1>Комната Души</h1>
+        <p>Пространственная расстановка состояний (Версия 2.0)</p>
+    </header>
 
-        <!-- Панель выбора символов -->
-        <div class="panel">
-            <h2>1. Элементы пространства</h2>
-            
-            <div class="category-title">Опоры и ресурс</div>
-            <div class="symbols-grid" id="gridSupports"></div>
-
-            <div class="category-title">Границы и фокус</div>
-            <div class="symbols-grid" id="gridFocus"></div>
-        </div>
-
-        <!-- Холст расстановки -->
-        <div class="panel">
-            <h2>2. Ваша Комната</h2>
-            <div class="canvas-area" id="canvasArea">
-                <div class="canvas-placeholder" id="placeholder">Выберите элементы выше, чтобы наполнить комнату метафорами</div>
+    <div class="app-container">
+        <!-- Боковая панель с элементами -->
+        <div class="sidebar">
+            <h3>Символы</h3>
+            <div class="items-list" id="itemsList">
+                <!-- Генерируются скриптом -->
             </div>
+            <p class="hint" style="text-align: left; font-size: 0.75rem;">Нажмите на символ, чтобы добавить его в круглую комнату. Перетаскивайте мышкой внутри.</p>
         </div>
 
-        <!-- Кнопка анализа -->
-        <button class="btn" id="analyzeBtn" style="display: none;">Проявит инсайт и ритуал-якорь</button>
+        <!-- Круглая комната (холст) -->
+        <div class="room-wrapper">
+            <h3 style="color: var(--amber-glow); font-size: 1rem; margin-bottom: 4px;">Внутреннее Пространство</h3>
+            <div class="circle-room" id="circleRoom">
+                <div class="room-center"></div>
+            </div>
+            <div class="hint">Клик правой кнопкой по элементу в комнате удаляет его</div>
+        </div>
 
-        <!-- Блок результата -->
-        <div class="result-box" id="resultBox">
-            <h3>Инсайт расстановки</h3>
-            <p id="insightText"></p>
-            
-            <h3>Физический ритуал-якорь</h3>
-            <p id="ritualText"></p>
-
-            <button class="btn btn-secondary" id="copyBtn">Скопировать отчет для консультации</button>
+        <!-- Нижняя панель управления и инсайтов -->
+        <div class="actions-panel">
+            <button class="btn" id="analyzeBtn">Проявить инсайт расстановки</button>
+            <div class="result-box" id="resultBox">
+                <h4>Инсайт пространства</h4>
+                <p id="insightText"></p>
+                <h4>Телесный якорь-ритуал</h4>
+                <p id="ritualText"></p>
+            </div>
         </div>
     </div>
 
     <script>
-        const symbols = [
-            // Опоры
-            { id: 1, name: "🕯️ Очаг", category: "support", desc: "Тепло, центр сил" },
-            { id: 2, name: "🪑 Кресло", category: "support", desc: "Устойчивость, отдых" },
-            { id: 3, name: "🪴 Растение", category: "support", desc: "Живой рост, корни" },
-            // Фокус
-            { id: 4, name: "🪞 Зеркало", category: "focus", desc: "Отражение правды" },
-            { id: 5, name: "🚪 Дверь", category: "focus", desc: "Переход, выбор пути" },
-            { id: 6, name: "⏳ Песочные часы", category: "focus", desc: "Время и темп" }
+        const availableItems = [
+            { id: 'fire', name: '🕯️ Очаг / Свеча' },
+            { id: 'mirror', name: '🪞 Зеркало' },
+            { id: 'chair', name: '🪑 Удобное кресло' },
+            { id: 'door', name: '🚪 Дверь' },
+            { id: 'plant', name: '🪴 Живое растение' },
+            { id: 'clock', name: '⏳ Песочные часы' }
         ];
 
-        let selectedSymbols = [];
+        let placedElements = [];
+        let activeDrag = null;
 
-        const gridSupports = document.getElementById('gridSupports');
-        const gridFocus = document.getElementById('gridFocus');
-        const canvasArea = document.getElementById('canvasArea');
-        const placeholder = document.getElementById('placeholder');
+        const itemsList = document.getElementById('itemsList');
+        const circleRoom = document.getElementById('circleRoom');
         const analyzeBtn = document.getElementById('analyzeBtn');
         const resultBox = document.getElementById('resultBox');
         const insightText = document.getElementById('insightText');
         const ritualText = document.getElementById('ritualText');
-        const copyBtn = document.getElementById('copyBtn');
 
-        function renderSymbols() {
-            gridSupports.innerHTML = '';
-            gridFocus.innerHTML = '';
-
-            symbols.forEach(sym => {
-                const card = document.createElement('div');
-                card.className = `symbol-card ${selectedSymbols.includes(sym.id) ? 'selected' : ''}`;
-                card.innerHTML = `<div class="name">${sym.name}</div><div class="desc">${sym.desc}</div>`;
-                card.onclick = () => toggleSymbol(sym.id);
-
-                if (sym.category === 'support') {
-                    gridSupports.appendChild(card);
-                } else {
-                    gridFocus.appendChild(card);
-                }
+        function renderSidebar() {
+            itemsList.innerHTML = '';
+            availableItems.forEach(item => {
+                const div = document.createElement('div');
+                div.className = 'item-card';
+                div.innerHTML = `<span>${item.name}</span>`;
+                div.onclick = () => addElementToRoom(item);
+                itemsList.appendChild(div);
             });
         }
 
-        function toggleSymbol(id) {
-            const index = selectedSymbols.indexOf(id);
-            if (index > -1) {
-                selectedSymbols.splice(index, 1);
-            } else {
-                selectedSymbols.push(id);
-            }
-            renderCanvas();
-            renderSymbols();
+        function addElementToRoom(item) {
+            // Случайная начальная позиция ближе к центру
+            const angle = Math.random * Math.PI * 2;
+            const dist = Math.random() * 60;
+            const x = 170 + Math.cos(angle) * dist;
+            const y = 170 + Math.sin(angle) * dist;
+
+            const elementData = {
+                id: Date.now() + Math.random(),
+                name: item.name,
+                x: x,
+                y: y
+            };
+
+            placedElements.push(elementData);
+            renderRoom();
         }
 
-        function renderCanvas() {
-            canvasArea.innerHTML = '';
-            if (selectedSymbols.length === 0) {
-                canvasArea.appendChild(placeholder);
-                analyzeBtn.style.display = 'none';
-                resultBox.style.display = 'none';
+        function renderRoom() {
+            // Удаляем старые элементы визуально, оставляя центр
+            const existing = circleRoom.querySelectorAll('.placed-element');
+            existing.forEach(el => el.remove());
+
+            placedElements.forEach(el => {
+                const div = document.createElement('div');
+                div.className = 'placed-element';
+                div.textContent = el.name;
+                div.style.left = `${el.x}px`;
+                div.style.top = `${el.y}px`;
+
+                // Логика перетаскивания мышкой
+                div.onmousedown = (e) => {
+                    activeDrag = el;
+                    e.stopPropagation();
+                };
+
+                // Удаление по правому клику
+                div.oncontextmenu = (e) => {
+                    e.preventDefault();
+                    placedElements = placedElements.filter(item => item.id !== el.id);
+                    renderRoom();
+                };
+
+                circleRoom.appendChild(div);
+            });
+        }
+
+        // Перемещение внутри круга
+        window.onmousemove = (e) => {
+            if (!activeDrag) return;
+            const rect = circleRoom.getBoundingClientRect();
+            let x = e.clientX - rect.left;
+            let y = e.clientY - rect.top;
+
+            // Ограничение в пределах круга (радиус 170px)
+            const centerX = 170;
+            const centerY = 170;
+            const dx = x - centerX;
+            const dy = y - centerY;
+            const dist = Math.sqrt(dx * dx + dy * dy);
+
+            if (dist > 150) {
+                // Фиксация на границе круга
+                x = centerX + (dx / dist) * 150;
+                y = centerY + (dy / dist) * 150;
+            }
+
+            activeDrag.x = x;
+            activeDrag.y = y;
+            renderRoom();
+        };
+
+        window.onmouseup = () => {
+            activeDrag = null;
+        };
+
+        analyzeBtn.onclick = () => {
+            if (placedElements.length === 0) {
+                alert("Сначала разместите хотя бы один элемент в круглой комнате.");
                 return;
             }
 
-            selectedSymbols.forEach(id => {
-                const sym = symbols.find(s => s.id === id);
-                const item = document.createElement('div');
-                item.className = 'placed-item';
-                item.innerHTML = `<span>${sym.name}</span> <button onclick="event.stopPropagation(); toggleSymbol(${sym.id})">×</button>`;
-                canvasArea.appendChild(item);
-            });
-
-            analyzeBtn.style.display = 'block';
-        }
-
-        analyzeBtn.onclick = () => {
-            const names = selectedSymbols.map(id => symbols.find(s => s.id === id).name).join(', ');
+            const names = placedElements.map(el => el.name).join(', ');
+            insightText.textContent = `Ваше размещение элементов (${names}) в пространстве комнаты указывает на текущий баланс сил. Взаимное расположение объектов отражает ваш внутренний фокус на стабилизацию опор и готовность к переменам.`;
+            ritualText.textContent = `Сделайте глубокий вдох, почувствуйте опору под ногами. Положите руку на грудь и мысленно поблагодарите себя за проявленную ясность в этот момент.`;
             
-            insightText.textContent = `В вашей текущей расстановке проявлены ключевые маркеры (${names}). Пространство указывает на баланс между внутренней потребностью в стабильной опоре и готовностью к качественному переходу. Фокус внимания смещен на осмысление текущего этапа и поиск внутренней ясности.`;
-            
-            ritualText.textContent = `Сделайте три глубоких вдоха и выдоха. Физически соприкоснись с опорой (почувствуйте стопами пол или спиной спинку стула). Произнесите про себя: «Я беру своё время и свои ресурсы ровно там, где я нахожусь сейчас».`;
-
             resultBox.style.display = 'block';
             resultBox.scrollIntoView({ behavior: 'smooth' });
         };
 
-        copyBtn.onclick = () => {
-            const report = `Результаты расстановки «Комната Души» (Версия 2.0):\nЭлементы: ${selectedSymbols.map(id => symbols.find(s => s.id === id).name).join(', ')}\nИнсайт: ${insightText.textContent}\nРитуал: ${ritualText.textContent}`;
-            navigator.clipboard.writeText(report).then(() => {
-                copyBtn.textContent = "Скопировано в буфер обмена!";
-                setTimeout(() => copyBtn.textContent = "Скопировать отчет для консультации", 2000);
-            });
-        };
-
-        renderSymbols();
+        renderSidebar();
     </script>
 </body>
 </html>
