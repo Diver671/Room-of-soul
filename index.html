@@ -30,112 +30,100 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 20px;
-            overflow-x: hidden;
-        }
-
-        header {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-
-        header h1 {
-            font-size: 1.8rem;
-            color: var(--amber-glow);
-            margin-bottom: 6px;
-            letter-spacing: 0.8px;
-            text-shadow: 0 0 15px rgba(245, 166, 35, 0.3);
-        }
-
-        header p {
-            color: var(--text-muted);
-            font-size: 0.95rem;
+            padding: 12px;
         }
 
         .app-container {
             width: 100%;
-            max-width: 900px;
-            display: grid;
-            grid-template-columns: 280px 1fr;
-            gap: 20px;
+            max-width: 600px;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
         }
 
-        @media (max-width: 768px) {
-            .app-container {
-                grid-template-columns: 1fr;
-            }
+        header {
+            text-align: center;
+            margin-bottom: 4px;
         }
 
-        .sidebar {
+        header h1 {
+            font-size: 1.4rem;
+            color: var(--amber-glow);
+            margin-bottom: 2px;
+            letter-spacing: 0.5px;
+            text-shadow: 0 0 12px rgba(245, 166, 35, 0.3);
+        }
+
+        header p {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+
+        .panel {
             background-color: var(--surface-velvet);
             border: 1px solid var(--border-velvet);
-            border-radius: 16px;
-            padding: 16px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
+            border-radius: 12px;
+            padding: 12px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
         }
 
-        .sidebar h3 {
-            font-size: 1rem;
+        .panel h3 {
+            font-size: 0.95rem;
             color: var(--amber-glow);
-            border-bottom: 1px solid var(--border-velvet);
-            padding-bottom: 8px;
+            margin-bottom: 8px;
         }
 
-        .items-list {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            max-height: 400px;
-            overflow-y: auto;
+        .items-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 6px;
+        }
+
+        @media (max-width: 480px) {
+            .items-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
         }
 
         .item-card {
             background: var(--surface-card);
             border: 1px solid var(--border-velvet);
-            border-radius: 10px;
-            padding: 10px 14px;
+            border-radius: 8px;
+            padding: 8px;
             cursor: pointer;
+            text-align: center;
             transition: all 0.2s ease;
-            display: flex;
-            align-items: center;
-            gap: 10px;
+            font-size: 0.8rem;
             user-select: none;
         }
 
         .item-card:hover {
             border-color: var(--amber-glow);
             background: #242d42;
-            transform: translateY(-1px);
         }
 
         .room-wrapper {
             background-color: var(--surface-velvet);
             border: 1px solid var(--border-velvet);
-            border-radius: 16px;
-            padding: 20px;
+            border-radius: 12px;
+            padding: 14px;
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
             position: relative;
-            min-height: 450px;
         }
 
-        /* Та самая круглая комната */
+        /* Адаптивная круглая комната */
         .circle-room {
-            width: 340px;
-            height: 340px;
+            width: 280px;
+            height: 280px;
             border-radius: 50%;
             background: radial-gradient(circle, #10141f 0%, #080a0f 85%);
             border: 2px solid var(--amber-glow);
-            box-shadow: inset 0 0 30px rgba(0, 0, 0, 0.8), 0 0 20px rgba(245, 166, 35, 0.15);
+            box-shadow: inset 0 0 25px rgba(0, 0, 0, 0.8), 0 0 15px rgba(245, 166, 35, 0.15);
             position: relative;
-            margin: 20px auto;
-            cursor: crosshair;
+            margin: 10px auto;
+            touch-action: none;
         }
 
         .room-center {
@@ -154,110 +142,92 @@
             background: var(--surface-card);
             border: 1px solid var(--amber-glow);
             color: var(--text-main);
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-size: 0.8rem;
+            padding: 4px 10px;
+            border-radius: 16px;
+            font-size: 0.75rem;
             cursor: grab;
             user-select: none;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.5);
             transform: translate(-50%, -50%);
             white-space: nowrap;
-            transition: border-color 0.2s;
         }
 
         .placed-element:active {
             cursor: grabbing;
         }
 
-        .placed-element:hover {
-            background: #28324a;
-        }
-
         .hint {
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             color: var(--text-muted);
             text-align: center;
-            margin-top: 10px;
-        }
-
-        .actions-panel {
-            grid-column: 1 / -1;
-            background-color: var(--surface-velvet);
-            border: 1px solid var(--border-velvet);
-            border-radius: 16px;
-            padding: 20px;
-            text-align: center;
+            margin-top: 6px;
         }
 
         .btn {
             background-color: var(--amber-glow);
             color: #080a0f;
             border: none;
-            border-radius: 10px;
-            padding: 12px 24px;
-            font-size: 1rem;
+            border-radius: 8px;
+            padding: 10px 16px;
+            font-size: 0.9rem;
             font-weight: 600;
             cursor: pointer;
+            width: 100%;
             transition: background 0.2s;
         }
 
         .btn:hover {
             background-color: var(--amber-hover);
-            box-shadow: 0 0 15px rgba(245, 166, 35, 0.4);
         }
 
         .result-box {
-            margin-top: 16px;
-            text-align: left;
+            margin-top: 10px;
             background: var(--surface-card);
             border: 1px solid var(--amber-glow);
-            border-radius: 12px;
-            padding: 16px;
+            border-radius: 10px;
+            padding: 12px;
             display: none;
         }
 
         .result-box h4 {
             color: var(--amber-glow);
-            margin-bottom: 6px;
-            font-size: 1rem;
+            margin-bottom: 4px;
+            font-size: 0.9rem;
         }
 
         .result-box p {
-            font-size: 0.9rem;
-            line-height: 1.4;
+            font-size: 0.8rem;
+            line-height: 1.35;
             color: var(--text-main);
-            margin-bottom: 12px;
+            margin-bottom: 8px;
         }
     </style>
 </head>
 <body>
 
-    <header>
-        <h1>Комната Души</h1>
-        <p>Пространственная расстановка состояний (Версия 2.0)</p>
-    </header>
-
     <div class="app-container">
-        <!-- Боковая панель с элементами -->
-        <div class="sidebar">
-            <h3>Символы</h3>
-            <div class="items-list" id="itemsList">
-                <!-- Генерируются скриптом -->
-            </div>
-            <p class="hint" style="text-align: left; font-size: 0.75rem;">Нажмите на символ, чтобы добавить его в круглую комнату. Перетаскивайте мышкой внутри.</p>
+        <header>
+            <h1>Комната Души</h1>
+            <p>Версия 2.0 • Расстановка</p>
+        </header>
+
+        <!-- Сетка выбора символов -->
+        <div class="panel">
+            <h3>Элементы</h3>
+            <div class="items-grid" id="itemsList"></div>
         </div>
 
-        <!-- Круглая комната (холст) -->
+        <!-- Круглая комната -->
         <div class="room-wrapper">
-            <h3 style="color: var(--amber-glow); font-size: 1rem; margin-bottom: 4px;">Внутреннее Пространство</h3>
+            <h3 style="margin-bottom: 2px;">Пространство</h3>
             <div class="circle-room" id="circleRoom">
                 <div class="room-center"></div>
             </div>
-            <div class="hint">Клик правой кнопкой по элементу в комнате удаляет его</div>
+            <div class="hint">Тапните по элементу для добавления. Перетаскивайте внутри круга. Долгое нажатие (или клик правой кнопкой) удаляет элемент.</div>
         </div>
 
-        <!-- Нижняя панель управления и инсайтов -->
-        <div class="actions-panel">
+        <!-- Кнопка и инсайт -->
+        <div class="panel">
             <button class="btn" id="analyzeBtn">Проявить инсайт расстановки</button>
             <div class="result-box" id="resultBox">
                 <h4>Инсайт пространства</h4>
@@ -270,12 +240,12 @@
 
     <script>
         const availableItems = [
-            { id: 'fire', name: '🕯️ Очаг / Свеча' },
+            { id: 'fire', name: '🕯️ Очаг' },
             { id: 'mirror', name: '🪞 Зеркало' },
-            { id: 'chair', name: '🪑 Удобное кресло' },
+            { id: 'chair', name: '🪑 Кресло' },
             { id: 'door', name: '🚪 Дверь' },
-            { id: 'plant', name: '🪴 Живое растение' },
-            { id: 'clock', name: '⏳ Песочные часы' }
+            { id: 'plant', name: '🪴 Растение' },
+            { id: 'clock', name: '⏳ Часы' }
         ];
 
         let placedElements = [];
@@ -288,23 +258,25 @@
         const insightText = document.getElementById('insightText');
         const ritualText = document.getElementById('ritualText');
 
+        const ROOM_RADIUS = 140; // Радиус для контейнера 280x280
+        const CENTER = 140;
+
         function renderSidebar() {
             itemsList.innerHTML = '';
             availableItems.forEach(item => {
                 const div = document.createElement('div');
                 div.className = 'item-card';
-                div.innerHTML = `<span>${item.name}</span>`;
+                div.textContent = item.name;
                 div.onclick = () => addElementToRoom(item);
                 itemsList.appendChild(div);
             });
         }
 
         function addElementToRoom(item) {
-            // Случайная начальная позиция ближе к центру
-            const angle = Math.random * Math.PI * 2;
+            const angle = Math.random() * Math.PI * 2;
             const dist = Math.random() * 60;
-            const x = 170 + Math.cos(angle) * dist;
-            const y = 170 + Math.sin(angle) * dist;
+            const x = CENTER + Math.cos(angle) * dist;
+            const y = CENTER + Math.sin(angle) * dist;
 
             const elementData = {
                 id: Date.now() + Math.random(),
@@ -318,7 +290,6 @@
         }
 
         function renderRoom() {
-            // Удаляем старые элементы визуально, оставляя центр
             const existing = circleRoom.querySelectorAll('.placed-element');
             existing.forEach(el => el.remove());
 
@@ -329,41 +300,50 @@
                 div.style.left = `${el.x}px`;
                 div.style.top = `${el.y}px`;
 
-                // Логика перетаскивания мышкой
-                div.onmousedown = (e) => {
+                const startDrag = (clientX, clientY) => {
                     activeDrag = el;
-                    e.stopPropagation();
                 };
 
-                // Удаление по правому клику
+                div.onmousedown = (e) => { e.stopPropagation(); startDrag(e.clientX, e.clientY); };
+                div.ontouchstart = (e) => { e.stopPropagation(); startDrag(e.touches[0].clientX, e.touches[0].clientY); };
+
                 div.oncontextmenu = (e) => {
                     e.preventDefault();
-                    placedElements = placedElements.filter(item => item.id !== el.id);
-                    renderRoom();
+                    removeElement(el.id);
                 };
+
+                // Удаление по долгому клику для телефонов
+                let touchTimer;
+                div.ontouchstart = (e) => {
+                    startDrag(e.touches[0].clientX, e.touches[0].clientY);
+                    touchTimer = setTimeout(() => {
+                        removeElement(el.id);
+                    }, 800);
+                };
+                div.ontouchend = () => clearTimeout(touchTimer);
 
                 circleRoom.appendChild(div);
             });
         }
 
-        // Перемещение внутри круга
-        window.onmousemove = (e) => {
+        function removeElement(id) {
+            placedElements = placedElements.filter(item => item.id !== id);
+            renderRoom();
+        }
+
+        const moveHandler = (clientX, clientY) => {
             if (!activeDrag) return;
             const rect = circleRoom.getBoundingClientRect();
-            let x = e.clientX - rect.left;
-            let y = e.clientY - rect.top;
+            let x = clientX - rect.left;
+            let y = clientY - rect.top;
 
-            // Ограничение в пределах круга (радиус 170px)
-            const centerX = 170;
-            const centerY = 170;
-            const dx = x - centerX;
-            const dy = y - centerY;
+            const dx = x - CENTER;
+            const dy = y - CENTER;
             const dist = Math.sqrt(dx * dx + dy * dy);
 
-            if (dist > 150) {
-                // Фиксация на границе круга
-                x = centerX + (dx / dist) * 150;
-                y = centerY + (dy / dist) * 150;
+            if (dist > ROOM_RADIUS - 20) {
+                x = CENTER + (dx / dist) * (ROOM_RADIUS - 20);
+                y = CENTER + (dy / dist) * (ROOM_RADIUS - 20);
             }
 
             activeDrag.x = x;
@@ -371,19 +351,21 @@
             renderRoom();
         };
 
-        window.onmouseup = () => {
-            activeDrag = null;
-        };
+        window.onmousemove = (e) => moveHandler(e.clientX, e.clientY);
+        window.ontouchmove = (e) => { if (e.touches.length > 0) moveHandler(e.touches[0].clientX, e.touches[0].clientY); };
+
+        window.onmouseup = () => { activeDrag = null; };
+        window.ontouchend = () => { activeDrag = null; };
 
         analyzeBtn.onclick = () => {
             if (placedElements.length === 0) {
-                alert("Сначала разместите хотя бы один элемент в круглой комнате.");
+                alert("Разместите хотя бы один элемент в комнате.");
                 return;
             }
 
             const names = placedElements.map(el => el.name).join(', ');
-            insightText.textContent = `Ваше размещение элементов (${names}) в пространстве комнаты указывает на текущий баланс сил. Взаимное расположение объектов отражает ваш внутренний фокус на стабилизацию опор и готовность к переменам.`;
-            ritualText.textContent = `Сделайте глубокий вдох, почувствуйте опору под ногами. Положите руку на грудь и мысленно поблагодарите себя за проявленную ясность в этот момент.`;
+            insightText.textContent = `Ваше поле (${names}) отражает актуальное внутреннее состояние. Взаимное расположение объектов показывает баланс между опорами и фокусом внимания.`;
+            ritualText.textContent = `Сделайте три глубоких вдоха. Почувствуйте заземление и стабильность в теле.`;
             
             resultBox.style.display = 'block';
             resultBox.scrollIntoView({ behavior: 'smooth' });
