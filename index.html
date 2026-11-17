@@ -1,1435 +1,377 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>Символический интерьер: Комната Души</title>
-  <style>
-    /* ==========================================================================
-       ДИЗАЙН-ТОКЕНЫ И ПАЛИТРА («НОЧНОЙ БАРХАТ И ТЁПЛЫЙ ЯНТАРЬ»)
-       ========================================================================== */
-    :root {
-      --bg-deep: #141e1b;
-      --bg-velvet: #1d2b26;
-      --bg-card: rgba(29, 43, 38, 0.88);
-      --bg-room: #17231f;
-      --gold: #d4a359;
-      --gold-light: #f3d59b;
-      --gold-glow: rgba(212, 163, 89, 0.28);
-      --cream: #f5efe6;
-      --cream-muted: rgba(245, 239, 230, 0.72);
-      --cream-dim: rgba(245, 239, 230, 0.45);
-      --border-subtle: rgba(212, 163, 89, 0.22);
-      --border-strong: rgba(243, 213, 155, 0.55);
-      --shadow-deep: 0 18px 42px rgba(6, 12, 10, 0.65);
-      --radius-lg: 22px;
-      --radius-md: 14px;
-      --radius-sm: 10px;
-      --transition: all 0.32s cubic-bezier(0.22, 1, 0.36, 1);
-    }
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      -webkit-tap-highlight-color: transparent;
-    }
-
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-      background-color: var(--bg-deep);
-      background-image:
-        radial-gradient(circle at 18% 12%, rgba(212, 163, 89, 0.12) 0%, transparent 45%),
-        radial-gradient(circle at 85% 88%, rgba(46, 79, 68, 0.28) 0%, transparent 50%),
-        linear-gradient(160deg, #111917 0%, #182521 55%, #121b18 100%);
-      color: var(--cream);
-      min-height: 100dvh;
-      display: flex;
-      justify-content: center;
-      align-items: flex-start;
-      padding: 16px;
-      overflow-x: hidden;
-      line-height: 1.5;
-    }
-
-    /* Контейнер приложения */
-    .app-shell {
-      width: 100%;
-      max-width: 780px;
-      min-height: calc(100dvh - 32px);
-      display: flex;
-      flex-direction: column;
-      position: relative;
-      z-index: 1;
-    }
-
-    /* Верхняя шапка */
-    .app-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 10px 4px 16px;
-      border-bottom: 1px solid var(--border-subtle);
-      margin-bottom: 18px;
-      gap: 12px;
-    }
-
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .brand-emblem {
-      width: 34px;
-      height: 34px;
-      border-radius: 50%;
-      background: radial-gradient(circle, rgba(243, 213, 155, 0.25), rgba(212, 163, 89, 0.06));
-      border: 1px solid var(--border-strong);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      box-shadow: 0 0 18px var(--gold-glow);
-      flex-shrink: 0;
-    }
-
-    .brand-title {
-      font-size: 0.95rem;
-      font-weight: 600;
-      letter-spacing: 0.03em;
-      color: var(--gold-light);
-    }
-
-    .brand-sub {
-      font-size: 0.72rem;
-      color: var(--cream-dim);
-      display: block;
-    }
-
-    .step-badge {
-      font-size: 0.75rem;
-      padding: 5px 12px;
-      border-radius: 999px;
-      background: rgba(212, 163, 89, 0.12);
-      border: 1px solid var(--border-subtle);
-      color: var(--gold-light);
-      white-space: nowrap;
-    }
-
-    /* Экраны */
-    .screen {
-      display: none;
-      flex-direction: column;
-      flex: 1;
-      animation: fadeSlideUp 0.45s cubic-bezier(0.22, 1, 0.36, 1) forwards;
-    }
-
-    .screen.active {
-      display: flex;
-    }
-
-    @keyframes fadeSlideUp {
-      from {
-        opacity: 0;
-        transform: translateY(14px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    /* Карточка */
-    .velvet-card {
-      background: var(--bg-card);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      border: 1px solid var(--border-subtle);
-      border-radius: var(--radius-lg);
-      padding: 24px 20px;
-      box-shadow: var(--shadow-deep);
-    }
-
-    h1, h2, h3 {
-      font-weight: 600;
-      color: var(--gold-light);
-      letter-spacing: 0.01em;
-    }
-
-    h1 {
-      font-size: 1.55rem;
-      line-height: 1.25;
-      margin-bottom: 12px;
-    }
-
-    h2 {
-      font-size: 1.22rem;
-      margin-bottom: 8px;
-    }
-
-    .lead-text {
-      color: var(--cream-muted);
-      font-size: 0.96rem;
-      margin-bottom: 20px;
-    }
-
-    /* Дыхательная пульсация на 1 экране */
-    .breath-orb {
-      width: 68px;
-      height: 68px;
-      margin: 4px auto 18px;
-      border-radius: 50%;
-      background: radial-gradient(circle at 35% 35%, var(--gold-light), var(--gold) 65%, rgba(212, 163, 89, 0.15));
-      box-shadow: 0 0 32px rgba(212, 163, 89, 0.45);
-      animation: breathe 5.5s ease-in-out infinite;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: var(--bg-deep);
-    }
-
-    @keyframes breathe {
-      0%, 100% {
-        transform: scale(0.94);
-        box-shadow: 0 0 22px rgba(212, 163, 89, 0.3);
-      }
-      50% {
-        transform: scale(1.06);
-        box-shadow: 0 0 42px rgba(243, 213, 155, 0.65);
-      }
-    }
-
-    /* Чипсы выбора намерения */
-    .intent-chips {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 9px;
-      margin-bottom: 16px;
-    }
-
-    .chip-btn {
-      background: rgba(20, 30, 27, 0.75);
-      border: 1px solid var(--border-subtle);
-      color: var(--cream);
-      padding: 10px 14px;
-      border-radius: var(--radius-md);
-      font-size: 0.86rem;
-      cursor: pointer;
-      transition: var(--transition);
-      text-align: left;
-    }
-
-    .chip-btn:hover {
-      border-color: var(--gold);
-      background: rgba(212, 163, 89, 0.12);
-    }
-
-    .chip-btn.selected {
-      background: linear-gradient(135deg, rgba(212, 163, 89, 0.28), rgba(212, 163, 89, 0.12));
-      border-color: var(--gold-light);
-      color: var(--gold-light);
-      box-shadow: 0 0 16px rgba(212, 163, 89, 0.22);
-    }
-
-    .intent-input-wrap {
-      margin-bottom: 22px;
-    }
-
-    .intent-label {
-      display: block;
-      font-size: 0.8rem;
-      color: var(--cream-dim);
-      margin-bottom: 6px;
-    }
-
-    .intent-input {
-      width: 100%;
-      background: rgba(15, 23, 20, 0.85);
-      border: 1px solid var(--border-subtle);
-      border-radius: var(--radius-md);
-      padding: 13px 15px;
-      color: var(--cream);
-      font-size: 0.95rem;
-      outline: none;
-      transition: var(--transition);
-    }
-
-    .intent-input:focus {
-      border-color: var(--gold-light);
-      box-shadow: 0 0 0 3px rgba(212, 163, 89, 0.16);
-    }
-
-    /* Кнопки */
-    .btn-primary {
-      width: 100%;
-      padding: 15px 20px;
-      border-radius: var(--radius-md);
-      border: none;
-      background: linear-gradient(135deg, #e2b872 0%, #c69043 100%);
-      color: #131c19;
-      font-weight: 700;
-      font-size: 0.98rem;
-      letter-spacing: 0.02em;
-      cursor: pointer;
-      box-shadow: 0 8px 24px rgba(212, 163, 89, 0.35);
-      transition: var(--transition);
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-    }
-
-    .btn-primary:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 12px 28px rgba(243, 213, 155, 0.45);
-    }
-
-    .btn-primary:active {
-      transform: scale(0.98);
-    }
-
-    .btn-secondary {
-      padding: 12px 16px;
-      border-radius: var(--radius-md);
-      border: 1px solid var(--border-strong);
-      background: rgba(29, 43, 38, 0.7);
-      color: var(--gold-light);
-      font-weight: 600;
-      font-size: 0.9rem;
-      cursor: pointer;
-      transition: var(--transition);
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-    }
-
-    .btn-secondary:hover {
-      background: rgba(212, 163, 89, 0.16);
-    }
-
-    /* ==========================================================================
-       ЭКРАН 2: ИНТЕРАКТИВНЫЙ КОНСТРУКТОР КОМНАТЫ ДУШИ
-       ========================================================================== */
-    .phase-banner {
-      background: rgba(29, 43, 38, 0.92);
-      border: 1px solid var(--border-subtle);
-      border-radius: var(--radius-md);
-      padding: 12px 15px;
-      margin-bottom: 12px;
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-    }
-
-    .phase-tag {
-      font-size: 0.73rem;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      color: var(--gold);
-      font-weight: 700;
-    }
-
-    .phase-desc {
-      font-size: 0.87rem;
-      color: var(--cream-muted);
-    }
-
-    /* Поле-Комната */
-    .room-wrapper {
-      position: relative;
-      width: 100%;
-      aspect-ratio: 4 / 3;
-      min-height: 290px;
-      max-height: 430px;
-      border-radius: var(--radius-lg);
-      background:
-        radial-gradient(circle at 50% 50%, rgba(243, 213, 155, 0.14) 0%, rgba(212, 163, 89, 0.04) 36%, rgba(15, 23, 20, 0.95) 85%),
-        repeating-linear-gradient(0deg, rgba(212, 163, 89, 0.04) 0px, rgba(212, 163, 89, 0.04) 1px, transparent 1px, transparent 36px),
-        repeating-linear-gradient(90deg, rgba(212, 163, 89, 0.04) 0px, rgba(212, 163, 89, 0.04) 1px, transparent 1px, transparent 36px);
-      border: 1.5px solid var(--border-strong);
-      box-shadow: inset 0 0 50px rgba(8, 14, 12, 0.85), var(--shadow-deep);
-      overflow: hidden;
-      touch-action: none;
-      user-select: none;
-      margin-bottom: 12px;
-    }
-
-    /* Символическая разметка комнаты: Центр (Ядро) и Периферия (Тени/Границы) */
-    .room-center-ring {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      width: 44%;
-      aspect-ratio: 1 / 1;
-      transform: translate(-50%, -50%);
-      border-radius: 50%;
-      border: 1px dashed rgba(243, 213, 155, 0.25);
-      background: radial-gradient(circle, rgba(243, 213, 155, 0.07) 0%, transparent 70%);
-      pointer-events: none;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .room-center-label {
-      font-size: 0.68rem;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: rgba(243, 213, 155, 0.35);
-      text-align: center;
-      pointer-events: none;
-    }
-
-    .room-zone-hint {
-      position: absolute;
-      font-size: 0.66rem;
-      color: rgba(245, 239, 230, 0.26);
-      pointer-events: none;
-      letter-spacing: 0.05em;
-    }
-    .zone-top { top: 8px; left: 50%; transform: translateX(-50%); }
-    .zone-bottom { bottom: 8px; left: 50%; transform: translateX(-50%); }
-    .zone-left { left: 10px; top: 50%; transform: translateY(-50%) rotate(-90deg); }
-    .zone-right { right: 10px; top: 50%; transform: translateY(-50%) rotate(90deg); }
-
-    .room-empty-tip {
-      position: absolute;
-      inset: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      padding: 24px;
-      color: var(--cream-dim);
-      font-size: 0.88rem;
-      pointer-events: none;
-      transition: opacity 0.3s ease;
-    }
-
-    /* Размещённый предмет в комнате */
-    .placed-item {
-      position: absolute;
-      transform: translate(-50%, -50%);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      cursor: grab;
-      z-index: 5;
-      transition: filter 0.25s ease, transform 0.12s ease;
-    }
-
-    .placed-item:active {
-      cursor: grabbing;
-      z-index: 20;
-    }
-
-    .placed-item.selected .item-token {
-      border-color: var(--gold-light);
-      box-shadow: 0 0 22px rgba(243, 213, 155, 0.65);
-    }
-
-    .item-token {
-      width: 54px;
-      height: 54px;
-      border-radius: 50%;
-      background: radial-gradient(circle at 30% 30%, #2a3e37, #16211d);
-      border: 1.5px solid var(--gold);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.55), 0 0 14px rgba(212, 163, 89, 0.25);
-      transition: var(--transition);
-    }
-
-    /* Состояние: В тени */
-    .placed-item.in-shadow .item-token {
-      background: radial-gradient(circle at 30% 30%, #1d2623, #0f1513);
-      border-color: rgba(245, 239, 230, 0.28);
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.7);
-      opacity: 0.68;
-      filter: grayscale(0.45);
-    }
-
-    /* Размер: Большой (акцентный) */
-    .placed-item.size-lg .item-token {
-      width: 68px;
-      height: 68px;
-      border-width: 2px;
-    }
-
-    .placed-item.size-lg svg {
-      width: 34px;
-      height: 34px;
-    }
-
-    .item-caption {
-      margin-top: 4px;
-      font-size: 0.68rem;
-      background: rgba(15, 23, 20, 0.85);
-      padding: 2px 7px;
-      border-radius: 6px;
-      color: var(--cream);
-      white-space: nowrap;
-      border: 1px solid rgba(212, 163, 89, 0.18);
-      pointer-events: none;
-    }
-
-    /* Панель управления выбранным предметом */
-    .inspector-bar {
-      background: rgba(24, 36, 32, 0.95);
-      border: 1px solid var(--border-subtle);
-      border-radius: var(--radius-md);
-      padding: 11px 13px;
-      margin-bottom: 12px;
-      display: flex;
-      flex-direction: column;
-      gap: 9px;
-      min-height: 76px;
-      justify-content: center;
-    }
-
-    .inspector-top {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 8px;
-    }
-
-    .inspector-title {
-      font-size: 0.88rem;
-      font-weight: 600;
-      color: var(--gold-light);
-    }
-
-    .inspector-meaning {
-      font-size: 0.79rem;
-      color: var(--cream-muted);
-    }
-
-    .inspector-actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-    }
-
-    .mini-ctrl {
-      background: rgba(212, 163, 89, 0.12);
-      border: 1px solid var(--border-subtle);
-      color: var(--cream);
-      font-size: 0.75rem;
-      padding: 6px 10px;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: var(--transition);
-    }
-
-    .mini-ctrl:hover {
-      background: rgba(212, 163, 89, 0.24);
-      border-color: var(--gold-light);
-    }
-
-    .mini-ctrl.danger {
-      border-color: rgba(224, 108, 95, 0.35);
-      color: #f3a69e;
-      background: rgba(224, 108, 95, 0.1);
-    }
-
-    /* Палитра символов */
-    .palette-label {
-      font-size: 0.76rem;
-      color: var(--cream-dim);
-      margin-bottom: 7px;
-      display: flex;
-      justify-content: space-between;
-    }
-
-    .symbol-palette {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 8px;
-      margin-bottom: 16px;
-    }
-
-    @media (min-width: 560px) {
-      .symbol-palette {
-        grid-template-columns: repeat(5, 1fr);
-      }
-    }
-
-    .palette-btn {
-      background: rgba(22, 33, 29, 0.88);
-      border: 1px solid var(--border-subtle);
-      border-radius: var(--radius-sm);
-      padding: 9px 6px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 5px;
-      color: var(--cream);
-      cursor: pointer;
-      transition: var(--transition);
-    }
-
-    .palette-btn:hover {
-      border-color: var(--gold);
-      background: rgba(212, 163, 89, 0.14);
-      transform: translateY(-1px);
-    }
-
-    .palette-btn.in-room {
-      border-color: rgba(212, 163, 89, 0.5);
-      background: rgba(212, 163, 89, 0.12);
-    }
-
-    .palette-btn span {
-      font-size: 0.73rem;
-      text-align: center;
-      line-height: 1.2;
-    }
-
-    /* ==========================================================================
-       ЭКРАН 3: РАСШИФРОВКА И ФИЗИЧЕСКИЙ РИТУАЛ-ЯКОРЬ
-       ========================================================================== */
-    .result-section {
-      margin-bottom: 18px;
-      padding-bottom: 16px;
-      border-bottom: 1px solid var(--border-subtle);
-    }
-
-    .result-section:last-of-type {
-      border-bottom: none;
-      margin-bottom: 10px;
-      padding-bottom: 0;
-    }
-
-    .result-query-box {
-      background: rgba(16, 24, 21, 0.75);
-      border-left: 3px solid var(--gold);
-      padding: 10px 14px;
-      border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
-      margin-bottom: 16px;
-      font-size: 0.88rem;
-      color: var(--gold-light);
-    }
-
-    .ritual-box {
-      background: linear-gradient(145deg, rgba(212, 163, 89, 0.16), rgba(24, 36, 32, 0.92));
-      border: 1px solid var(--border-strong);
-      border-radius: var(--radius-md);
-      padding: 16px;
-      box-shadow: 0 8px 26px rgba(0, 0, 0, 0.35);
-    }
-
-    .ritual-title {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 0.96rem;
-      font-weight: 700;
-      color: var(--gold-light);
-      margin-bottom: 8px;
-    }
-
-    .insight-list {
-      list-style: none;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      font-size: 0.91rem;
-      color: var(--cream-muted);
-    }
-
-    .insight-list li {
-      position: relative;
-      padding-left: 18px;
-    }
-
-    .insight-list li::before {
-      content: "✦";
-      position: absolute;
-      left: 0;
-      top: 0;
-      color: var(--gold);
-      font-size: 0.8rem;
-    }
-
-    .result-actions {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      margin-top: 18px;
-    }
-
-    @media (min-width: 520px) {
-      .result-actions {
-        flex-direction: row;
-      }
-      .result-actions .btn-primary {
-        flex: 2;
-      }
-      .result-actions .btn-secondary {
-        flex: 1;
-      }
-    }
-
-    /* Всплывающее уведомление (вместо alert) */
-    .toast {
-      position: fixed;
-      bottom: 22px;
-      left: 50%;
-      transform: translateX(-50%) translateY(90px);
-      background: #23352f;
-      color: var(--gold-light);
-      border: 1px solid var(--gold-light);
-      padding: 11px 18px;
-      border-radius: 999px;
-      font-size: 0.85rem;
-      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.65);
-      z-index: 100;
-      opacity: 0;
-      transition: all 0.35s cubic-bezier(0.22, 1, 0.36, 1);
-      pointer-events: none;
-      text-align: center;
-      max-width: 90vw;
-    }
-
-    .toast.show {
-      opacity: 1;
-      transform: translateX(-50%) translateY(0);
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Комната Души — Версия 2.0</title>
+    <style>
+        :root {
+            --bg-deep: #080a0f;
+            --surface-velvet: #131722;
+            --surface-card: #1c2230;
+            --amber-glow: #f5a623;
+            --amber-hover: #ffb833;
+            --text-main: #f0f4f8;
+            --text-muted: #8c9bae;
+            --border-velvet: #2a344a;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-deep);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 12px;
+        }
+
+        .app-container {
+            width: 100%;
+            max-width: 600px;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 4px;
+        }
+
+        header h1 {
+            font-size: 1.4rem;
+            color: var(--amber-glow);
+            margin-bottom: 2px;
+            letter-spacing: 0.5px;
+            text-shadow: 0 0 12px rgba(245, 166, 35, 0.3);
+        }
+
+        header p {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+
+        .panel {
+            background-color: var(--surface-velvet);
+            border: 1px solid var(--border-velvet);
+            border-radius: 12px;
+            padding: 12px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
+        }
+
+        .panel h3 {
+            font-size: 0.95rem;
+            color: var(--amber-glow);
+            margin-bottom: 8px;
+        }
+
+        .items-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 6px;
+        }
+
+        @media (max-width: 480px) {
+            .items-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        .item-card {
+            background: var(--surface-card);
+            border: 1px solid var(--border-velvet);
+            border-radius: 8px;
+            padding: 8px;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.2s ease;
+            font-size: 0.8rem;
+            user-select: none;
+        }
+
+        .item-card:hover {
+            border-color: var(--amber-glow);
+            background: #242d42;
+        }
+
+        .room-wrapper {
+            background-color: var(--surface-velvet);
+            border: 1px solid var(--border-velvet);
+            border-radius: 12px;
+            padding: 14px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+        }
+
+        /* Адаптивная круглая комната */
+        .circle-room {
+            width: 280px;
+            height: 280px;
+            border-radius: 50%;
+            background: radial-gradient(circle, #10141f 0%, #080a0f 85%);
+            border: 2px solid var(--amber-glow);
+            box-shadow: inset 0 0 25px rgba(0, 0, 0, 0.8), 0 0 15px rgba(245, 166, 35, 0.15);
+            position: relative;
+            margin: 10px auto;
+            touch-action: none;
+        }
+
+        .room-center {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 6px;
+            height: 6px;
+            background-color: rgba(245, 166, 35, 0.3);
+            border-radius: 50%;
+        }
+
+        .placed-element {
+            position: absolute;
+            background: var(--surface-card);
+            border: 1px solid var(--amber-glow);
+            color: var(--text-main);
+            padding: 4px 10px;
+            border-radius: 16px;
+            font-size: 0.75rem;
+            cursor: grab;
+            user-select: none;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.5);
+            transform: translate(-50%, -50%);
+            white-space: nowrap;
+        }
+
+        .placed-element:active {
+            cursor: grabbing;
+        }
+
+        .hint {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-align: center;
+            margin-top: 6px;
+        }
+
+        .btn {
+            background-color: var(--amber-glow);
+            color: #080a0f;
+            border: none;
+            border-radius: 8px;
+            padding: 10px 16px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            transition: background 0.2s;
+        }
+
+        .btn:hover {
+            background-color: var(--amber-hover);
+        }
+
+        .result-box {
+            margin-top: 10px;
+            background: var(--surface-card);
+            border: 1px solid var(--amber-glow);
+            border-radius: 10px;
+            padding: 12px;
+            display: none;
+        }
+
+        .result-box h4 {
+            color: var(--amber-glow);
+            margin-bottom: 4px;
+            font-size: 0.9rem;
+        }
+
+        .result-box p {
+            font-size: 0.8rem;
+            line-height: 1.35;
+            color: var(--text-main);
+            margin-bottom: 8px;
+        }
+    </style>
 </head>
 <body>
-  <div class="app-shell">
-    <!-- Шапка -->
-    <header class="app-header">
-      <div class="brand">
-        <div class="brand-emblem" aria-hidden="true">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#f3d59b" stroke-width="1.8">
-            <circle cx="12" cy="12" r="4"/>
-            <path d="M12 2v3M12 19v3M4.93 4.93l2.12 2.12M16.95 16.95l2.12 2.12M2 12h3M19 12h3M4.93 19.07l2.12-2.12M16.95 7.05l2.12-2.12"/>
-          </svg>
-        </div>
-        <div>
-          <span class="brand-title">Комната Души</span>
-          <span class="brand-sub">Символический интерьер</span>
-        </div>
-      </div>
-      <div class="step-badge" id="stepIndicator">Шаг 1 из 3 • Настройка</div>
-    </header>
 
-    <!-- ======================================================================
-         ЭКРАН 1: НАСТРОЙКА НАМЕРЕНИЯ
-         ====================================================================== -->
-    <section class="screen active" id="screen1">
-      <div class="velvet-card">
-        <div class="breath-orb" aria-hidden="true">
-          <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-            <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z"/>
-          </svg>
+    <div class="app-container">
+        <header>
+            <h1>Комната Души</h1>
+            <p>Версия 2.0 • Расстановка</p>
+        </header>
+
+        <!-- Сетка выбора символов -->
+        <div class="panel">
+            <h3>Элементы</h3>
+            <div class="items-grid" id="itemsList"></div>
         </div>
 
-        <h1>С чем ты входишь в пространство своей души?</h1>
-        <p class="lead-text">
-          Закрой глаза на пару секунд, сделай глубокий вдох и медленный выдох. Внешний мир — это проекция твоего внутреннего «планетария». Выбери запрос, который сейчас откликается сильнее всего, или впиши свой.
-        </p>
-
-        <div class="intent-chips" id="intentChips">
-          <button type="button" class="chip-btn selected" data-intent="Ясность в деле и деньгах">Ясность в деле и деньгах</button>
-          <button type="button" class="chip-btn" data-intent="Спокойствие и внутренняя опора">Спокойствие и опора</button>
-          <button type="button" class="chip-btn" data-intent="Тепло и близость в отношениях">Тепло в отношениях</button>
-          <button type="button" class="chip-btn" data-intent="Выход из застоя и тупика">Выход из тупика</button>
-          <button type="button" class="chip-btn" data-intent="Возвращение своей энергии и радости">Возвращение энергии</button>
-        </div>
-
-        <div class="intent-input-wrap">
-          <label class="intent-label" for="customIntent">Твоё намерение (можно отредактировать):</label>
-          <input
-            type="text"
-            id="customIntent"
-            class="intent-input"
-            value="Ясность в деле и деньгах"
-            placeholder="Например: Хочу понять, куда направить силы..."
-            maxlength="120"
-          />
-        </div>
-
-        <button type="button" class="btn-primary" id="toRoomBtn">
-          <span>Открыть дверь в Комнату Души</span>
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
-            <path d="M5 12h14M13 5l7 7-7 7"/>
-          </svg>
-        </button>
-      </div>
-    </section>
-
-    <!-- ======================================================================
-         ЭКРАН 2: ИНТЕРАКТИВНЫЙ КОНСТРУКТОР КОМНАТЫ
-         ====================================================================== -->
-    <section class="screen" id="screen2">
-      <div class="phase-banner" id="phaseBanner">
-        <span class="phase-tag" id="phaseTag">Этап А • Как сейчас?</span>
-        <p class="phase-desc" id="phaseDesc">
-          Нажимай на символы ниже и перетаскивай их в комнате так, как чувствуешь свою жизнь прямо сейчас. Не думай головой — доверься рукам.
-        </p>
-      </div>
-
-      <!-- Интерактивное полотно Комнаты -->
-      <div class="room-wrapper" id="roomCanvas">
-        <div class="room-center-ring">
-          <span class="room-center-label">Центр<br>Ядра</span>
-        </div>
-        <span class="room-zone-hint zone-top">Перспектива / Будущее</span>
-        <span class="room-zone-hint zone-bottom">Опора / Фундамент</span>
-        <span class="room-zone-hint zone-left">Прошлое / Корни</span>
-        <span class="room-zone-hint zone-right">Действие / Мир</span>
-
-        <div class="room-empty-tip" id="roomEmptyTip">
-          Выбери 3–6 предметов из палитры ниже, чтобы наполнить свою Комнату Души
-        </div>
-      </div>
-
-      <!-- Инспектор выбранного символа -->
-      <div class="inspector-bar" id="inspectorBar">
-        <div class="inspector-top">
-          <span class="inspector-title" id="inspTitle">Нажми на предмет в комнате</span>
-        </div>
-        <div class="inspector-meaning" id="inspMeaning">
-          Ты сможешь перетаскивать его пальцем, менять масштаб или переводить «на свет / в тень».
-        </div>
-        <div class="inspector-actions" id="inspActions" style="display: none;">
-          <button type="button" class="mini-ctrl" id="toggleLightBtn">☀️ На свету / 🌑 В тени</button>
-          <button type="button" class="mini-ctrl" id="toggleSizeBtn">🔍 Размер</button>
-          <button type="button" class="mini-ctrl danger" id="removeItemBtn">✕ Убрать</button>
-        </div>
-      </div>
-
-      <!-- Палитра символов -->
-      <div class="palette-label">
-        <span>Символы интерьера (нажми, чтобы добавить):</span>
-        <span id="itemCounter">0 / 9</span>
-      </div>
-      <div class="symbol-palette" id="symbolPalette"></div>
-
-      <!-- Кнопка перехода между этапами -->
-      <button type="button" class="btn-primary" id="roomNextBtn">
-        Зафиксировать текущую картину
-      </button>
-    </section>
-
-    <!-- ======================================================================
-         ЭКРАН 3: РАСШИФРОВКА И ФИЗИЧЕСКИЙ РИТУАЛ-ЯКОРЬ
-         ====================================================================== -->
-    <section class="screen" id="screen3">
-      <div class="velvet-card">
-        <h2>Послание твоей Комнаты Души</h2>
-        <div class="result-query-box" id="resultQueryDisplay"></div>
-
-        <div class="result-section">
-          <h3>Что изменилось в твоём пространстве</h3>
-          <ul class="insight-list" id="transformationInsights"></ul>
-        </div>
-
-        <div class="result-section">
-          <h3>Глубинный смысл новой расстановки</h3>
-          <p class="lead-text" id="deepInterpretation" style="margin-bottom: 0;"></p>
-        </div>
-
-        <div class="result-section">
-          <div class="ritual-box">
-            <div class="ritual-title">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#f3d59b" stroke-width="2">
-                <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/>
-              </svg>
-              <span>Твой физический ритуал-якорь (на 24 часа)</span>
+        <!-- Круглая комната -->
+        <div class="room-wrapper">
+            <h3 style="margin-bottom: 2px;">Пространство</h3>
+            <div class="circle-room" id="circleRoom">
+                <div class="room-center"></div>
             </div>
-            <p id="physicalRitualText" style="font-size: 0.92rem; color: var(--cream);"></p>
-          </div>
+            <div class="hint">Тапните по элементу для добавления. Перетаскивайте внутри круга. Долгое нажатие (или клик правой кнопкой) удаляет элемент.</div>
         </div>
 
-        <div class="result-actions">
-          <button type="button" class="btn-primary" id="copyShareBtn">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1">
-              <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
-              <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
-            </svg>
-            <span>Скопировать результат для чата</span>
-          </button>
-          <button type="button" class="btn-secondary" id="restartBtn">
-            Пройти заново
-          </button>
+        <!-- Кнопка и инсайт -->
+        <div class="panel">
+            <button class="btn" id="analyzeBtn">Проявить инсайт расстановки</button>
+            <div class="result-box" id="resultBox">
+                <h4>Инсайт пространства</h4>
+                <p id="insightText"></p>
+                <h4>Телесный якорь-ритуал</h4>
+                <p id="ritualText"></p>
+            </div>
         </div>
-      </div>
-    </section>
-  </div>
+    </div>
 
-  <!-- Всплывающее уведомление -->
-  <div class="toast" id="toastMsg"></div>
+    <script>
+        const availableItems = [
+            { id: 'fire', name: '🕯️ Очаг' },
+            { id: 'mirror', name: '🪞 Зеркало' },
+            { id: 'chair', name: '🪑 Кресло' },
+            { id: 'door', name: '🚪 Дверь' },
+            { id: 'plant', name: '🪴 Растение' },
+            { id: 'clock', name: '⏳ Часы' }
+        ];
 
-  <script>
-    /**
-     * ==========================================================================
-     * ДАННЫЕ СИМВОЛОВ ИНТЕРЬЕРА (ВЕКТОРНЫЕ SVG И МЕТАФОРЫ)
-     * ==========================================================================
-     */
-    const SYMBOLS = [
-      {
-        id: 'hearth',
-        name: 'Очаг / Свеча',
-        emoji: '🔥',
-        meaning: 'Живая энергия, страсть, источник тепла и твоё «хочу».',
-        centerInsight: 'В центре комнаты оказался Очаг — ты возвращаешь себе право гореть своим делом и питаться от собственного источника тепла.',
-        ritual: 'Зажги дома настоящую свечу хотя бы на 15 минут. Посмотри на живой огонь и вслух произнеси своё намерение, чувствуя тепло в груди.'
-      },
-      {
-        id: 'key',
-        name: 'Старинный Ключ',
-        emoji: '🗝️',
-        meaning: 'Доступ к новым возможностям, решение, право открыть закрытое.',
-        centerInsight: 'Старинный Ключ занял ключевое место — решение уже в твоих руках, осталось разрешить себе повернуть его в замке.',
-        ritual: 'Возьми в руки связку своих реальных ключей, протри их мягкой тканью и переложи на новое видное место со словами: «Я открываю себе дорогу».'
-      },
-      {
-        id: 'chest',
-        name: 'Тяжёлый Сундук',
-        emoji: '📦',
-        meaning: 'Родовой груз, накопленный опыт, обязательства или старые страхи.',
-        centerInsight: 'Тяжёлый Сундук в твоей комнате говорит о накопленном опыте и багаже: важно различать, что из этого твоё сокровище, а что — чужая ноша.',
-        ritual: 'Разбери один закрытый ящик, полку или сумку. Выброси 3 ненужные старые вещи, физически освобождая место для новой энергии.'
-      },
-      {
-        id: 'mirror',
-        name: 'Зеркало',
-        emoji: '🪞',
-        meaning: 'Честный взгляд на себя, самоценность, проекции внешнего мира.',
-        centerInsight: 'Зеркало вышло на первый план — мир сейчас отражает твоё истинное состояние. Пора увидеть свою настоящую силу без искажений.',
-        ritual: 'Подойди к зеркалу дома, протри его до блеска, посмотри себе прямо в глаза 30 секунд и скажи: «Я вижу тебя и я на твоей стороне».'
-      },
-      {
-        id: 'door',
-        name: 'Дверь',
-        emoji: '🚪',
-        meaning: 'Выход на новый уровень, переход, здоровые личные границы.',
-        centerInsight: 'Дверь стала главным акцентом — ты стоишь на пороге нового этапа и готов(а) сделать шаг за пределы привычного сценария.',
-        ritual: 'Протри ручку входной двери в свой дом и, переступая порог в следующий раз, сделай это осознанно — как шаг в новую главу жизни.'
-      },
-      {
-        id: 'window',
-        name: 'Окно в сад',
-        emoji: '🪟',
-        meaning: 'Связь с миром, свежий воздух, перспектива и доверие потоку.',
-        centerInsight: 'Окно в сад открывает пространство — тебе сейчас жизненно необходимы свежий взгляд, масштаб и контакт с большим миром.',
-        ritual: 'Распахни окно дома на 5 минут, впусти свежий воздух, посмотри вдаль на небо или деревья и сделай три глубоких свободных вдоха.'
-      },
-      {
-        id: 'sofa',
-        name: 'Мягкий Диван',
-        emoji: '🛋️',
-        meaning: 'Право на отдых, принятие, телесное расслабление и безопасность.',
-        centerInsight: 'Мягкий Диван стал опорой пространства — твоя психика просит замедлиться и перестать бежать. Из расслабления родится самый точный шаг.',
-        ritual: 'Устрой себе 20 минут «законного ничегонеделания» на диване или в кресле без телефона — просто позволь телу полностью обмякнуть.'
-      },
-      {
-        id: 'vase',
-        name: 'Антикварная Ваза',
-        emoji: '🏺',
-        meaning: 'Ценность, красота, бережность к себе, сосуд для принятия благ.',
-        centerInsight: 'Антикварная Ваза в центре — напоминание о твоей уникальной ценности и способности принимать дары, деньги и заботу.',
-        ritual: 'Поставь на видное место красивую чашку, пиалу или вазу, налей туда чистой воды (или поставь цветок) как символ наполненности.'
-      },
-      {
-        id: 'compass',
-        name: 'Компас / Карта',
-        emoji: '🧭',
-        meaning: 'Внутренний вектор, личный миф, верное направление пути.',
-        centerInsight: 'Компас занял почётное место — ты настраиваешь свой внутренний навигатор и перестаёшь сверяться с чужими маршрутами.',
-        ritual: 'Выпиши на чистый лист бумаги 3 главных ориентира на ближайший месяц и положи этот лист под подушку или на рабочий стол.'
-      }
-    ];
+        let placedElements = [];
+        let activeDrag = null;
 
-    /**
-     * Генератор чистых векторных SVG-иконок для каждого символа
-     */
-    function getSymbolSVG(id) {
-      const icons = {
-        hearth: `<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#f3d59b" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2c.5 3.5-2 5.5-2 8.5a4 4 0 0 0 8 0c0-2.5-1.5-4.5-3-6.5-.5 1.5-1.5 2.5-3 2z"/><path d="M5 20h14"/><path d="M7 17h10"/></svg>`,
-        key: `<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#f3d59b" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="7.5" cy="15.5" r="4.5"/><path d="m21 2-9.6 9.6"/><path d="m15.5 7.5 3 3L22 7l-3-3"/></svg>`,
-        chest: `<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#f3d59b" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M3 11h18"/><path d="M12 9v4"/><path d="M7 7V5a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v2"/></svg>`,
-        mirror: `<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#f3d59b" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="10" rx="6" ry="8"/><path d="M9 7l2-2"/><path d="M10 11l4-4"/><path d="M7 21h10"/><path d="M12 18v3"/></svg>`,
-        door: `<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#f3d59b" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 21V4a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v17"/><path d="M3 21h18"/><circle cx="15" cy="12" r="1"/></svg>`,
-        window: `<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#f3d59b" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M12 3v18"/><path d="M4 12h16"/></svg>`,
-        sofa: `<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#f3d59b" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 9V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v3"/><path d="M2 11v5a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-5a2 2 0 0 0-4 0v2H6v-2a2 2 0 0 0-4 0Z"/><path d="M6 18v2"/><path d="M18 18v2"/></svg>`,
-        vase: `<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#f3d59b" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3h6"/><path d="M10 3v3c-3 2-4 5-4 8a6 6 0 0 0 12 0c0-3-1-6-4-8V3"/></svg>`,
-        compass: `<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#f3d59b" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg>`
-      };
-      return icons[id] || '';
-    }
+        const itemsList = document.getElementById('itemsList');
+        const circleRoom = document.getElementById('circleRoom');
+        const analyzeBtn = document.getElementById('analyzeBtn');
+        const resultBox = document.getElementById('resultBox');
+        const insightText = document.getElementById('insightText');
+        const ritualText = document.getElementById('ritualText');
 
-    /**
-     * ==========================================================================
-     * СОСТОЯНИЕ ПРИЛОЖЕНИЯ
-     * ==========================================================================
-     */
-    const state = {
-      intent: 'Ясность в деле и деньгах',
-      phase: 'A', // 'A' — как сейчас, 'B' — трансформация
-      items: [],  // { id, x (%), y (%), shadow (bool), size ('md'|'lg') }
-      snapshotA: [], // Снимок состояния «Как сейчас» для сравнения
-      selectedId: null,
-      shareText: ''
-    };
+        const ROOM_RADIUS = 140; // Радиус для контейнера 280x280
+        const CENTER = 140;
 
-    // DOM-элементы
-    const stepIndicator = document.getElementById('stepIndicator');
-    const screen1 = document.getElementById('screen1');
-    const screen2 = document.getElementById('screen2');
-    const screen3 = document.getElementById('screen3');
-    const customIntentInput = document.getElementById('customIntent');
-    const roomCanvas = document.getElementById('roomCanvas');
-    const roomEmptyTip = document.getElementById('roomEmptyTip');
-    const symbolPalette = document.getElementById('symbolPalette');
-    const itemCounter = document.getElementById('itemCounter');
-    const inspTitle = document.getElementById('inspTitle');
-    const inspMeaning = document.getElementById('inspMeaning');
-    const inspActions = document.getElementById('inspActions');
-    const toastMsg = document.getElementById('toastMsg');
+        function renderSidebar() {
+            itemsList.innerHTML = '';
+            availableItems.forEach(item => {
+                const div = document.createElement('div');
+                div.className = 'item-card';
+                div.textContent = item.name;
+                div.onclick = () => addElementToRoom(item);
+                itemsList.appendChild(div);
+            });
+        }
 
-    /**
-     * Показ мягкого уведомления вместо alert()
-     */
-    let toastTimer = null;
-    function showToast(text) {
-      toastMsg.textContent = text;
-      toastMsg.classList.add('show');
-      clearTimeout(toastTimer);
-      toastTimer = setTimeout(() => {
-        toastMsg.classList.remove('show');
-      }, 2800);
-    }
+        function addElementToRoom(item) {
+            const angle = Math.random() * Math.PI * 2;
+            const dist = Math.random() * 60;
+            const x = CENTER + Math.cos(angle) * dist;
+            const y = CENTER + Math.sin(angle) * dist;
 
-    /**
-     * Переключение экранов
-     */
-    function goToScreen(num) {
-      [screen1, screen2, screen3].forEach(s => s.classList.remove('active'));
-      if (num === 1) {
-        screen1.classList.add('active');
-        stepIndicator.textContent = 'Шаг 1 из 3 • Настройка';
-      } else if (num === 2) {
-        screen2.classList.add('active');
-        stepIndicator.textContent = state.phase === 'A' ? 'Шаг 2 из 3 • Как сейчас' : 'Шаг 2 из 3 • Трансформация';
-      } else if (num === 3) {
-        screen3.classList.add('active');
-        stepIndicator.textContent = 'Шаг 3 из 3 • Расшифровка';
-      }
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
+            const elementData = {
+                id: Date.now() + Math.random(),
+                name: item.name,
+                x: x,
+                y: y
+            };
 
-    /**
-     * ==========================================================================
-     * ЛОГИКА ЭКРАНА 1: НАСТРОЙКА НАМЕРЕНИЯ
-     * ==========================================================================
-     */
-    document.getElementById('intentChips').addEventListener('click', (e) => {
-      const btn = e.target.closest('.chip-btn');
-      if (!btn) return;
-      document.querySelectorAll('.chip-btn').forEach(b => b.classList.remove('selected'));
-      btn.classList.add('selected');
-      customIntentInput.value = btn.dataset.intent;
-      state.intent = btn.dataset.intent;
-    });
+            placedElements.push(elementData);
+            renderRoom();
+        }
 
-    document.getElementById('toRoomBtn').addEventListener('click', () => {
-      const val = customIntentInput.value.trim();
-      if (!val) {
-        showToast('Напиши пару слов о своём намерении, чтобы открыть комнату');
-        customIntentInput.focus();
-        return;
-      }
-      state.intent = val;
-      state.phase = 'A';
-      updatePhaseUI();
-      renderPalette();
-      renderRoom();
-      goToScreen(2);
-    });
+        function renderRoom() {
+            const existing = circleRoom.querySelectorAll('.placed-element');
+            existing.forEach(el => el.remove());
 
-    /**
-     * ==========================================================================
-     * ЛОГИКА ЭКРАНА 2: ИНТЕРАКТИВНЫЙ КОНСТРУКТОР КОМНАТЫ
-     * ==========================================================================
-     */
-    function updatePhaseUI() {
-      const phaseTag = document.getElementById('phaseTag');
-      const phaseDesc = document.getElementById('phaseDesc');
-      const roomNextBtn = document.getElementById('roomNextBtn');
+            placedElements.forEach(el => {
+                const div = document.createElement('div');
+                div.className = 'placed-element';
+                div.textContent = el.name;
+                div.style.left = `${el.x}px`;
+                div.style.top = `${el.y}px`;
 
-      if (state.phase === 'A') {
-        phaseTag.textContent = 'Этап А • Как сейчас?';
-        phaseDesc.textContent = 'Нажимай на символы ниже и перетаскивай их в комнате так, как чувствуешь свою ситуацию прямо сейчас. Что в центре, а что задвинуто в тень?';
-        roomNextBtn.textContent = 'Зафиксировать текущую картину →';
-        stepIndicator.textContent = 'Шаг 2 из 3 • Как сейчас';
-      } else {
-        phaseTag.textContent = 'Этап Б • Трансформация пространства';
-        phaseDesc.textContent = 'Теперь подвигай предметы, выведи важное на свет, убери лишнее или добавь новое, пока внутри не появится: «Ага! Вот теперь легко дышится».';
-        roomNextBtn.textContent = 'Завершить и получить расшифровку ✦';
-        stepIndicator.textContent = 'Шаг 2 из 3 • Трансформация';
-      }
-    }
+                const startDrag = (clientX, clientY) => {
+                    activeDrag = el;
+                };
 
-    /**
-     * Отрисовка палитры символов
-     */
-    function renderPalette() {
-      symbolPalette.innerHTML = '';
-      SYMBOLS.forEach(sym => {
-        const exists = state.items.some(i => i.id === sym.id);
-        const btn = document.createElement('button');
-        btn.type = 'button';
-        btn.className = 'palette-btn' + (exists ? ' in-room' : '');
-        btn.innerHTML = `
-          ${getSymbolSVG(sym.id)}
-          <span>${sym.name.split(' / ')[0]}</span>
-        `;
-        btn.addEventListener('click', () => toggleSymbolInRoom(sym.id));
-        symbolPalette.appendChild(btn);
-      });
-      itemCounter.textContent = `${state.items.length} / ${SYMBOLS.length}`;
-    }
+                div.onmousedown = (e) => { e.stopPropagation(); startDrag(e.clientX, e.clientY); };
+                div.ontouchstart = (e) => { e.stopPropagation(); startDrag(e.touches[0].clientX, e.touches[0].clientY); };
 
-    /**
-     * Добавление / выделение символа в комнате
-     */
-    function toggleSymbolInRoom(id) {
-      const existing = state.items.find(i => i.id === id);
-      if (existing) {
-        selectItem(id);
-        showToast('Предмет уже в комнате — перетащи его или измени состояние');
-        return;
-      }
+                div.oncontextmenu = (e) => {
+                    e.preventDefault();
+                    removeElement(el.id);
+                };
 
-      // Расставляем новые предметы с небольшим смещением, чтобы не перекрывались
-      const offsetIndex = state.items.length;
-      const presets = [
-        { x: 50, y: 50 },
-        { x: 30, y: 38 },
-        { x: 70, y: 40 },
-        { x: 34, y: 68 },
-        { x: 68, y: 66 },
-        { x: 50, y: 26 },
-        { x: 50, y: 74 },
-        { x: 22, y: 52 },
-        { x: 78, y: 52 }
-      ];
-      const pos = presets[offsetIndex % presets.length];
+                // Удаление по долгому клику для телефонов
+                let touchTimer;
+                div.ontouchstart = (e) => {
+                    startDrag(e.touches[0].clientX, e.touches[0].clientY);
+                    touchTimer = setTimeout(() => {
+                        removeElement(el.id);
+                    }, 800);
+                };
+                div.ontouchend = () => clearTimeout(touchTimer);
 
-      state.items.push({
-        id,
-        x: pos.x,
-        y: pos.y,
-        shadow: false,
-        size: 'md'
-      });
+                circleRoom.appendChild(div);
+            });
+        }
 
-      selectItem(id);
-      renderPalette();
-      renderRoom();
-    }
+        function removeElement(id) {
+            placedElements = placedElements.filter(item => item.id !== id);
+            renderRoom();
+        }
 
-    /**
-     * Выбор предмета и обновление инспектора
-     */
-    function selectItem(id, skipRender = false) {
-      state.selectedId = id;
-      const item = state.items.find(i => i.id === id);
-      const sym = SYMBOLS.find(s => s.id === id);
+        const moveHandler = (clientX, clientY) => {
+            if (!activeDrag) return;
+            const rect = circleRoom.getBoundingClientRect();
+            let x = clientX - rect.left;
+            let y = clientY - rect.top;
 
-      if (!item || !sym) {
-        inspTitle.textContent = 'Нажми на предмет в комнате';
-        inspMeaning.textContent = 'Ты сможешь перетаскивать его пальцем, менять масштаб или переводить «на свет / в тень».';
-        inspActions.style.display = 'none';
-        if (!skipRender) renderRoom();
-        return;
-      }
+            const dx = x - CENTER;
+            const dy = y - CENTER;
+            const dist = Math.sqrt(dx * dx + dy * dy);
 
-      inspTitle.textContent = `${sym.emoji} ${sym.name} ${item.shadow ? '(в тени)' : '(на свету)'}`;
-      inspMeaning.textContent = sym.meaning;
-      inspActions.style.display = 'flex';
-      if (!skipRender) {
-        renderRoom();
-      } else {
-        roomCanvas.querySelectorAll('.placed-item').forEach(node => {
-          node.classList.toggle('selected', node.dataset.id === id);
-        });
-      }
-    }
-
-    // Кнопки управления выбранным символом
-    document.getElementById('toggleLightBtn').addEventListener('click', () => {
-      const item = state.items.find(i => i.id === state.selectedId);
-      if (!item) return;
-      item.shadow = !item.shadow;
-      selectItem(item.id);
-    });
-
-    document.getElementById('toggleSizeBtn').addEventListener('click', () => {
-      const item = state.items.find(i => i.id === state.selectedId);
-      if (!item) return;
-      item.size = item.size === 'md' ? 'lg' : 'md';
-      renderRoom();
-    });
-
-    document.getElementById('removeItemBtn').addEventListener('click', () => {
-      if (!state.selectedId) return;
-      state.items = state.items.filter(i => i.id !== state.selectedId);
-      state.selectedId = null;
-      selectItem(null);
-      renderPalette();
-      renderRoom();
-    });
-
-    /**
-     * Отрисовка предметов на полотне комнаты + Drag & Drop (мышь и тач)
-     */
-    function renderRoom() {
-      // Удаляем старые узлы предметов
-      roomCanvas.querySelectorAll('.placed-item').forEach(el => el.remove());
-
-      roomEmptyTip.style.opacity = state.items.length === 0 ? '1' : '0';
-
-      state.items.forEach(item => {
-        const sym = SYMBOLS.find(s => s.id === item.id);
-        if (!sym) return;
-
-        const el = document.createElement('div');
-        el.className = 'placed-item'
-          + (item.shadow ? ' in-shadow' : '')
-          + (item.size === 'lg' ? ' size-lg' : '')
-          + (state.selectedId === item.id ? ' selected' : '');
-        el.style.left = `${item.x}%`;
-        el.style.top = `${item.y}%`;
-        el.dataset.id = item.id;
-
-        el.innerHTML = `
-          <div class="item-token">${getSymbolSVG(sym.id)}</div>
-          <span class="item-caption">${sym.name.split(' / ')[0]}</span>
-        `;
-
-        // Инициализация перетаскивания (Pointer Events работают одинаково для мыши и пальца)
-        el.addEventListener('pointerdown', (e) => {
-          e.stopPropagation();
-          selectItem(item.id, true);
-
-          const rect = roomCanvas.getBoundingClientRect();
-          const startX = e.clientX;
-          const startY = e.clientY;
-          const origX = item.x;
-          const origY = item.y;
-          const pointerId = e.pointerId;
-
-          try {
-            if (el.isConnected && typeof el.setPointerCapture === 'function') {
-              el.setPointerCapture(pointerId);
+            if (dist > ROOM_RADIUS - 20) {
+                x = CENTER + (dx / dist) * (ROOM_RADIUS - 20);
+                y = CENTER + (dy / dist) * (ROOM_RADIUS - 20);
             }
-          } catch (_) {
-            // Игнорируем, если захват указателя недоступен в текущем контексте
-          }
 
-          function onPointerMove(moveEvent) {
-            if (moveEvent.pointerId !== pointerId) return;
-            const dx = ((moveEvent.clientX - startX) / rect.width) * 100;
-            const dy = ((moveEvent.clientY - startY) / rect.height) * 100;
-            // Ограничиваем в пределах комнаты с небольшим отступом
-            item.x = Math.max(9, Math.min(91, origX + dx));
-            item.y = Math.max(11, Math.min(89, origY + dy));
-            el.style.left = `${item.x}%`;
-            el.style.top = `${item.y}%`;
-          }
+            activeDrag.x = x;
+            activeDrag.y = y;
+            renderRoom();
+        };
 
-          function onPointerUp(upEvent) {
-            if (upEvent.pointerId !== pointerId) return;
-            try {
-              if (el.hasPointerCapture && el.hasPointerCapture(pointerId)) {
-                el.releasePointerCapture(pointerId);
-              }
-            } catch (_) {
-              // Игнорируем
+        window.onmousemove = (e) => moveHandler(e.clientX, e.clientY);
+        window.ontouchmove = (e) => { if (e.touches.length > 0) moveHandler(e.touches[0].clientX, e.touches[0].clientY); };
+
+        window.onmouseup = () => { activeDrag = null; };
+        window.ontouchend = () => { activeDrag = null; };
+
+        analyzeBtn.onclick = () => {
+            if (placedElements.length === 0) {
+                alert("Разместите хотя бы один элемент в комнате.");
+                return;
             }
-            window.removeEventListener('pointermove', onPointerMove);
-            window.removeEventListener('pointerup', onPointerUp);
-            window.removeEventListener('pointercancel', onPointerUp);
-          }
 
-          window.addEventListener('pointermove', onPointerMove);
-          window.addEventListener('pointerup', onPointerUp);
-          window.addEventListener('pointercancel', onPointerUp);
-        });
+            const names = placedElements.map(el => el.name).join(', ');
+            insightText.textContent = `Ваше поле (${names}) отражает актуальное внутреннее состояние. Взаимное расположение объектов показывает баланс между опорами и фокусом внимания.`;
+            ritualText.textContent = `Сделайте три глубоких вдоха. Почувствуйте заземление и стабильность в теле.`;
+            
+            resultBox.style.display = 'block';
+            resultBox.scrollIntoView({ behavior: 'smooth' });
+        };
 
-        roomCanvas.appendChild(el);
-      });
-    }
-
-    // Снятие выделения при клике на пустое место комнаты
-    roomCanvas.addEventListener('pointerdown', () => {
-      if (state.selectedId) {
-        state.selectedId = null;
-        selectItem(null);
-      }
-    });
-
-    // Переход из Этапа А в Этап Б, а затем на Экран 3
-    document.getElementById('roomNextBtn').addEventListener('click', () => {
-      if (state.items.length < 2) {
-        showToast('Добавь хотя бы 2–3 символа в комнату, чтобы увидеть картину');
-        return;
-      }
-
-      if (state.phase === 'A') {
-        // Сохраняем глубокую копию состояния «Как сейчас»
-        state.snapshotA = JSON.parse(JSON.stringify(state.items));
-        state.phase = 'B';
-        updatePhaseUI();
-        showToast('Картина зафиксирована! Теперь трансформируй комнату так, как хочется');
-      } else {
-        generateResult();
-        goToScreen(3);
-      }
-    });
-
-    /**
-     * ==========================================================================
-     * ЭКРАН 3: СИСТЕМНО-СИМВОЛИЧЕСКИЙ АНАЛИЗ И ГЕНЕРАЦИЯ РИТУАЛА
-     * ==========================================================================
-     */
-    function distanceToCenter(item) {
-      const dx = item.x - 50;
-      const dy = item.y - 50;
-      return Math.sqrt(dx * dx + dy * dy);
-    }
-
-    function generateResult() {
-      document.getElementById('resultQueryDisplay').innerHTML =
-        `<strong>Твой запрос:</strong> «${escapeHtml(state.intent)}»`;
-
-      const insights = [];
-      const snapMap = new Map(state.snapshotA.map(i => [i.id, i]));
-      const currMap = new Map(state.items.map(i => [i.id, i]));
-
-      // 1. Что добавилось на этапе трансформации
-      const added = state.items.filter(i => !snapMap.has(i.id));
-      if (added.length > 0) {
-        const names = added.map(i => SYMBOLS.find(s => s.id === i.id).name).join(', ');
-        insights.push(`В твоём пространстве появились новые ресурсы: <strong>${names}</strong>. Психика готова впустить это качество в твою реальность.`);
-      }
-
-      // 2. Что было убрано
-      const removed = state.snapshotA.filter(i => !currMap.has(i.id));
-      if (removed.length > 0) {
-        const names = removed.map(i => SYMBOLS.find(s => s.id === i.id).name).join(', ');
-        insights.push(`Ты освободил(а) комнату от лишнего: убраны <strong>${names}</strong>. Освободившееся место — это энергия для движения вперёд.`);
-      }
-
-      // 3. Что вышло из тени на свет
-      const litUp = state.items.filter(i => {
-        const prev = snapMap.get(i.id);
-        return prev && prev.shadow && !i.shadow;
-      });
-      if (litUp.length > 0) {
-        const names = litUp.map(i => SYMBOLS.find(s => s.id === i.id).name).join(', ');
-        insights.push(`Вышли из тени на свет: <strong>${names}</strong>. Ты перестаёшь прятать эту часть себя и возвращаешь ей голос.`);
-      }
-
-      // 4. Находим главный символ (ближайший к центру Ядра и на свету)
-      const activeItems = state.items.filter(i => !i.shadow);
-      const pool = activeItems.length > 0 ? activeItems : state.items;
-      const sortedByCenter = [...pool].sort((a, b) => {
-        const scoreA = distanceToCenter(a) - (a.size === 'lg' ? 14 : 0);
-        const scoreB = distanceToCenter(b) - (b.size === 'lg' ? 14 : 0);
-        return scoreA - scoreB;
-      });
-
-      const coreItem = sortedByCenter[0];
-      const coreSym = SYMBOLS.find(s => s.id === coreItem.id);
-
-      insights.push(`Главным центром силы твоей обновлённой комнаты стал символ <strong>«${coreSym.name}»</strong>.`);
-
-      // Если пользователь только передвинул предметы без добавления/удаления
-      if (added.length === 0 && removed.length === 0 && litUp.length === 0) {
-        insights.unshift('Ты бережно перестроил(а) внутреннюю геометрию: те же элементы встали на свои места, и напряжение сменилось гармонией.');
-      }
-
-      const listEl = document.getElementById('transformationInsights');
-      listEl.innerHTML = insights.map(text => `<li>${text}</li>`).join('');
-
-      // Глубинная интерпретация в стиле вебинара
-      const litCount = state.items.filter(i => !i.shadow).length;
-      const shadowCount = state.items.filter(i => i.shadow).length;
-      let atmosphereNote = '';
-      if (shadowCount === 0) {
-        atmosphereNote = 'Все элементы твоей комнаты сейчас наполнены светом — в пространстве много ясности и готовности действовать открыто.';
-      } else if (shadowCount >= litCount) {
-        atmosphereNote = 'В комнате сохраняется глубокая тишина и тень — сейчас важно не торопить себя, а бережно напитать внутренний источник.';
-      } else {
-        atmosphereNote = 'В твоём интерьере соблюдён живой баланс света и тени: ты видишь свою главную опору и признаёшь те процессы, которым нужно время дозреть.';
-      }
-
-      document.getElementById('deepInterpretation').textContent =
-        `${coreSym.centerInsight} ${atmosphereNote} Помни: когда внутри комнаты души становится легко дышать, внешний «планетарий» неизбежно начинает перестраивать декорации твоей жизни под этот новый образ.`;
-
-      // Физический ритуал-якорь
-      document.getElementById('physicalRitualText').textContent = coreSym.ritual;
-
-      // Формируем красивый текст для копирования в чат участников
-      state.shareText = [
-        `✨ Мой «Символический интерьер: Комната Души»`,
-        `🎯 Запрос: ${state.intent}`,
-        `🕯 Главный символ новой опоры: ${coreSym.emoji} ${coreSym.name}`,
-        `🌿 Инсайт: ${coreSym.centerInsight}`,
-        `🔑 Мой ритуал-якорь на 24 часа: ${coreSym.ritual}`
-      ].join('\n\n');
-    }
-
-    function escapeHtml(str) {
-      return str.replace(/[&<>"']/g, (m) => ({
-        '&': '&amp;',
-        '<': '&lt;',
-        '>': '&gt;',
-        '"': '&quot;',
-        "'": '&#39;'
-      }[m]));
-    }
-
-    /**
-     * Копирование результата в буфер обмена (через безопасный fallback execCommand)
-     */
-    document.getElementById('copyShareBtn').addEventListener('click', () => {
-      const textarea = document.createElement('textarea');
-      textarea.value = state.shareText;
-      textarea.style.position = 'fixed';
-      textarea.style.opacity = '0';
-      document.body.appendChild(textarea);
-      textarea.select();
-      try {
-        document.execCommand('copy');
-        showToast('Результат скопирован! Вставь его в чат участников ✨');
-      } catch (err) {
-        showToast('Не удалось скопировать автоматически — выдели текст вручную');
-      }
-      document.body.removeChild(textarea);
-    });
-
-    /**
-     * Сброс и повторное прохождение
-     */
-    document.getElementById('restartBtn').addEventListener('click', () => {
-      state.phase = 'A';
-      state.items = [];
-      state.snapshotA = [];
-      state.selectedId = null;
-      selectItem(null);
-      goToScreen(1);
-    });
-  </script>
+        renderSidebar();
+    </script>
 </body>
 </html>
