@@ -6,13 +6,14 @@
     <title>Комната Души — Версия 2.0</title>
     <style>
         :root {
-            --bg-color: #0d0f14;
-            --card-bg: #161923;
+            --bg-color: #0b0d12;
+            --card-bg: #141722;
             --accent-amber: #f5a623;
             --accent-amber-hover: #ffb833;
             --text-main: #e2e8f0;
             --text-muted: #94a3b8;
-            --border-color: #2a2f42;
+            --border-color: #242b3d;
+            --danger: #ff5252;
         }
 
         * {
@@ -29,59 +30,70 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 20px;
+            padding: 16px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 720px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
         }
 
         header {
             text-align: center;
-            margin-bottom: 24px;
+            margin-bottom: 8px;
         }
 
         header h1 {
-            font-size: 1.75rem;
+            font-size: 1.6rem;
             color: var(--accent-amber);
-            margin-bottom: 8px;
+            margin-bottom: 4px;
             letter-spacing: 0.5px;
         }
 
         header p {
             color: var(--text-muted);
-            font-size: 0.95rem;
-        }
-
-        .container {
-            width: 100%;
-            max-width: 800px;
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
+            font-size: 0.9rem;
         }
 
         .panel {
             background-color: var(--card-bg);
             border: 1px solid var(--border-color);
             border-radius: 12px;
-            padding: 20px;
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+            padding: 16px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
         }
 
         .panel h2 {
-            font-size: 1.2rem;
+            font-size: 1.05rem;
             margin-bottom: 12px;
             color: var(--accent-amber);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .category-title {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin: 10px 0 6px 0;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         .symbols-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-            gap: 12px;
+            grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+            gap: 10px;
         }
 
         .symbol-card {
-            background: #1e2230;
+            background: #1a1f2e;
             border: 1px solid var(--border-color);
             border-radius: 8px;
-            padding: 12px;
+            padding: 10px;
             text-align: center;
             cursor: pointer;
             transition: all 0.2s ease;
@@ -94,20 +106,31 @@
         }
 
         .symbol-card.selected {
-            background: rgba(245, 166, 35, 0.15);
+            background: rgba(245, 166, 35, 0.12);
             border-color: var(--accent-amber);
         }
 
+        .symbol-card .name {
+            font-size: 0.9rem;
+            font-weight: 500;
+            margin-bottom: 2px;
+        }
+
+        .symbol-card .desc {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
         .canvas-area {
-            background: #11141d;
+            background: #0d0f17;
             border: 2px dashed var(--border-color);
             border-radius: 12px;
-            min-height: 250px;
+            min-height: 200px;
             display: flex;
             flex-wrap: wrap;
             align-content: flex-start;
-            gap: 12px;
-            padding: 16px;
+            gap: 10px;
+            padding: 14px;
             position: relative;
         }
 
@@ -115,16 +138,16 @@
             color: var(--text-muted);
             margin: auto;
             text-align: center;
-            font-size: 0.95rem;
+            font-size: 0.9rem;
             pointer-events: none;
         }
 
         .placed-item {
-            background: #1e2230;
+            background: #1a1f2e;
             border: 1px solid var(--accent-amber);
             border-radius: 8px;
-            padding: 10px 16px;
-            font-size: 0.9rem;
+            padding: 8px 12px;
+            font-size: 0.85rem;
             display: flex;
             align-items: center;
             gap: 8px;
@@ -137,19 +160,20 @@
             color: var(--text-muted);
             cursor: pointer;
             font-size: 1rem;
+            line-height: 1;
         }
 
         .placed-item button:hover {
-            color: #ff5252;
+            color: var(--danger);
         }
 
         .btn {
             background-color: var(--accent-amber);
-            color: #0d0f14;
+            color: #0b0d12;
             border: none;
             border-radius: 8px;
             padding: 12px 20px;
-            font-size: 1rem;
+            font-size: 0.95rem;
             font-weight: 600;
             cursor: pointer;
             transition: background 0.2s;
@@ -160,24 +184,41 @@
             background-color: var(--accent-amber-hover);
         }
 
+        .btn-secondary {
+            background-color: transparent;
+            color: var(--accent-amber);
+            border: 1px solid var(--accent-amber);
+            margin-top: 10px;
+        }
+
+        .btn-secondary:hover {
+            background-color: rgba(245, 166, 35, 0.1);
+        }
+
         .result-box {
-            background: #161923;
+            background: var(--card-bg);
             border: 1px solid var(--accent-amber);
             border-radius: 12px;
-            padding: 20px;
+            padding: 16px;
             display: none;
             animation: fadeIn 0.4s ease;
         }
 
         .result-box h3 {
             color: var(--accent-amber);
-            margin-bottom: 10px;
+            font-size: 1.05rem;
+            margin-bottom: 6px;
+            margin-top: 12px;
+        }
+
+        .result-box h3:first-child {
+            margin-top: 0;
         }
 
         .result-box p {
-            line-height: 1.5;
+            line-height: 1.45;
             color: var(--text-main);
-            margin-bottom: 12px;
+            font-size: 0.9rem;
         }
 
         @keyframes fadeIn {
@@ -188,68 +229,85 @@
 </head>
 <body>
 
-    <header>
-        <h1>Комната Души</h1>
-        <p>Интерактивная метафорическая расстановка (Версия 2.0)</p>
-    </header>
-
     <div class="container">
+        <header>
+            <h1>Комната Души</h1>
+            <p>Системная расстановка состояния (Версия 2.0)</p>
+        </header>
+
         <!-- Панель выбора символов -->
         <div class="panel">
-            <h2>1. Выберите элементы для расстановки</h2>
-            <div class="symbols-grid" id="symbolsContainer">
-                <!-- Генерируются скриптом -->
-            </div>
+            <h2>1. Элементы пространства</h2>
+            
+            <div class="category-title">Опоры и ресурс</div>
+            <div class="symbols-grid" id="gridSupports"></div>
+
+            <div class="category-title">Границы и фокус</div>
+            <div class="symbols-grid" id="gridFocus"></div>
         </div>
 
         <!-- Холст расстановки -->
         <div class="panel">
-            <h2>2. Ваше пространство</h2>
+            <h2>2. Ваша Комната</h2>
             <div class="canvas-area" id="canvasArea">
-                <div class="canvas-placeholder" id="placeholder">Выберите элементы выше, чтобы разместить их в Комнате Души</div>
+                <div class="canvas-placeholder" id="placeholder">Выберите элементы выше, чтобы наполнить комнату метафорами</div>
             </div>
         </div>
 
         <!-- Кнопка анализа -->
-        <button class="btn" id="analyzeBtn" style="display: none;">Получить инсайт и ритуал-якорь</button>
+        <button class="btn" id="analyzeBtn" style="display: none;">Проявит инсайт и ритуал-якорь</button>
 
         <!-- Блок результата -->
         <div class="result-box" id="resultBox">
             <h3>Инсайт расстановки</h3>
             <p id="insightText"></p>
-            <h3 style="margin-top: 16px;">Физический ритуал-якорь</h3>
+            
+            <h3>Физический ритуал-якорь</h3>
             <p id="ritualText"></p>
+
+            <button class="btn btn-secondary" id="copyBtn">Скопировать отчет для консультации</button>
         </div>
     </div>
 
     <script>
         const symbols = [
-            { id: 1, name: "🕯️ Очаг / Свеча", category: "Тепло и ресурс" },
-            { id: 2, name: "🪞 Старинное зеркало", category: "Отражение сути" },
-            { id: 3, name: "🪑 Удобное кресло", category: "Опора и отдых" },
-            { id: 4, name: "🚪 Приоткрытая дверь", category: "Путь и изменения" },
-            { id: 5, name: "🪴 Живое растение", category: "Рост и развитие" },
-            { id: 6, name: "⏳ Песочные часы", category: "Время и процессы" }
+            // Опоры
+            { id: 1, name: "🕯️ Очаг", category: "support", desc: "Тепло, центр сил" },
+            { id: 2, name: "🪑 Кресло", category: "support", desc: "Устойчивость, отдых" },
+            { id: 3, name: "🪴 Растение", category: "support", desc: "Живой рост, корни" },
+            // Фокус
+            { id: 4, name: "🪞 Зеркало", category: "focus", desc: "Отражение правды" },
+            { id: 5, name: "🚪 Дверь", category: "focus", desc: "Переход, выбор пути" },
+            { id: 6, name: "⏳ Песочные часы", category: "focus", desc: "Время и темп" }
         ];
 
         let selectedSymbols = [];
 
-        const symbolsContainer = document.getElementById('symbolsContainer');
+        const gridSupports = document.getElementById('gridSupports');
+        const gridFocus = document.getElementById('gridFocus');
         const canvasArea = document.getElementById('canvasArea');
         const placeholder = document.getElementById('placeholder');
         const analyzeBtn = document.getElementById('analyzeBtn');
         const resultBox = document.getElementById('resultBox');
         const insightText = document.getElementById('insightText');
         const ritualText = document.getElementById('ritualText');
+        const copyBtn = document.getElementById('copyBtn');
 
         function renderSymbols() {
-            symbolsContainer.innerHTML = '';
+            gridSupports.innerHTML = '';
+            gridFocus.innerHTML = '';
+
             symbols.forEach(sym => {
                 const card = document.createElement('div');
                 card.className = `symbol-card ${selectedSymbols.includes(sym.id) ? 'selected' : ''}`;
-                card.innerHTML = `<strong>${sym.name}</strong><br><small style="color:var(--text-muted);">${sym.category}</small>`;
+                card.innerHTML = `<div class="name">${sym.name}</div><div class="desc">${sym.desc}</div>`;
                 card.onclick = () => toggleSymbol(sym.id);
-                symbolsContainer.appendChild(card);
+
+                if (sym.category === 'support') {
+                    gridSupports.appendChild(card);
+                } else {
+                    gridFocus.appendChild(card);
+                }
             });
         }
 
@@ -285,10 +343,22 @@
         }
 
         analyzeBtn.onclick = () => {
+            const names = selectedSymbols.map(id => symbols.find(s => s.id === id).name).join(', ');
+            
+            insightText.textContent = `В вашей текущей расстановке проявлены ключевые маркеры (${names}). Пространство указывает на баланс между внутренней потребностью в стабильной опоре и готовностью к качественному переходу. Фокус внимания смещен на осмысление текущего этапа и поиск внутренней ясности.`;
+            
+            ritualText.textContent = `Сделайте три глубоких вдоха и выдоха. Физически соприкоснись с опорой (почувствуйте стопами пол или спиной спинку стула). Произнесите про себя: «Я беру своё время и свои ресурсы ровно там, где я нахожусь сейчас».`;
+
             resultBox.style.display = 'block';
-            insightText.textContent = "Ваша текущая расстановка отражает внутренний баланс между потребностью в безопасности и готовностью к внутреннему обновлению. Выбранные объекты показывают фокус внимания на текущих внутренних опорах.";
-            ritualText.textContent = "Зажгите настоящую свечу или уделите 3 минуты тишине в удобном кресле, сделав три глубоких вдоха. Почувствуйте телесную плотность и заземление в моменте «здесь и сейчас».";
             resultBox.scrollIntoView({ behavior: 'smooth' });
+        };
+
+        copyBtn.onclick = () => {
+            const report = `Результаты расстановки «Комната Души» (Версия 2.0):\nЭлементы: ${selectedSymbols.map(id => symbols.find(s => s.id === id).name).join(', ')}\nИнсайт: ${insightText.textContent}\nРитуал: ${ritualText.textContent}`;
+            navigator.clipboard.writeText(report).then(() => {
+                copyBtn.textContent = "Скопировано в буфер обмена!";
+                setTimeout(() => copyBtn.textContent = "Скопировать отчет для консультации", 2000);
+            });
         };
 
         renderSymbols();
