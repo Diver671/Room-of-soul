@@ -355,7 +355,6 @@
       margin-bottom: 12px;
     }
 
-    /* Символическая разметка комнаты: Центр (Ядро) и Периферия (Тени/Границы) */
     .room-center-ring {
       position: absolute;
       top: 50%;
@@ -407,7 +406,6 @@
       transition: opacity 0.3s ease;
     }
 
-    /* Размещённый предмет в комнате */
     .placed-item {
       position: absolute;
       transform: translate(-50%, -50%);
@@ -442,7 +440,6 @@
       transition: var(--transition);
     }
 
-    /* Состояние: В тени */
     .placed-item.in-shadow .item-token {
       background: radial-gradient(circle at 30% 30%, #1d2623, #0f1513);
       border-color: rgba(245, 239, 230, 0.28);
@@ -451,7 +448,6 @@
       filter: grayscale(0.45);
     }
 
-    /* Размер: Большой (акцентный) */
     .placed-item.size-lg .item-token {
       width: 68px;
       height: 68px;
@@ -475,7 +471,6 @@
       pointer-events: none;
     }
 
-    /* Панель управления выбранным предметом */
     .inspector-bar {
       background: rgba(24, 36, 32, 0.95);
       border: 1px solid var(--border-subtle);
@@ -535,7 +530,6 @@
       background: rgba(224, 108, 95, 0.1);
     }
 
-    /* Палитра символов */
     .palette-label {
       font-size: 0.76rem;
       color: var(--cream-dim);
@@ -588,9 +582,6 @@
       line-height: 1.2;
     }
 
-    /* ==========================================================================
-       ЭКРАН 3: РАСШИФРОВКА И ФИЗИЧЕСКИЙ РИТУАЛ-ЯКОРЬ
-       ========================================================================== */
     .result-section {
       margin-bottom: 18px;
       padding-bottom: 16px;
@@ -673,7 +664,6 @@
       }
     }
 
-    /* Всплывающее уведомление (вместо alert) */
     .toast {
       position: fixed;
       bottom: 22px;
@@ -702,7 +692,6 @@
 </head>
 <body>
   <div class="app-shell">
-    <!-- Шапка -->
     <header class="app-header">
       <div class="brand">
         <div class="brand-emblem" aria-hidden="true">
@@ -713,15 +702,12 @@
         </div>
         <div>
           <span class="brand-title">Комната Души</span>
-          <span class="brand-sub">Символический интерьер</span>
+          <span class="brand-sub">Символический интерьер v2.0</span>
         </div>
       </div>
       <div class="step-badge" id="stepIndicator">Шаг 1 из 3 • Настройка</div>
     </header>
 
-    <!-- ======================================================================
-         ЭКРАН 1: НАСТРОЙКА НАМЕРЕНИЯ
-         ====================================================================== -->
     <section class="screen active" id="screen1">
       <div class="velvet-card">
         <div class="breath-orb" aria-hidden="true">
@@ -764,9 +750,6 @@
       </div>
     </section>
 
-    <!-- ======================================================================
-         ЭКРАН 2: ИНТЕРАКТИВНЫЙ КОНСТРУКТОР КОМНАТЫ
-         ====================================================================== -->
     <section class="screen" id="screen2">
       <div class="phase-banner" id="phaseBanner">
         <span class="phase-tag" id="phaseTag">Этап А • Как сейчас?</span>
@@ -775,7 +758,6 @@
         </p>
       </div>
 
-      <!-- Интерактивное полотно Комнаты -->
       <div class="room-wrapper" id="roomCanvas">
         <div class="room-center-ring">
           <span class="room-center-label">Центр<br>Ядра</span>
@@ -790,7 +772,6 @@
         </div>
       </div>
 
-      <!-- Инспектор выбранного символа -->
       <div class="inspector-bar" id="inspectorBar">
         <div class="inspector-top">
           <span class="inspector-title" id="inspTitle">Нажми на предмет в комнате</span>
@@ -805,22 +786,17 @@
         </div>
       </div>
 
-      <!-- Палитра символов -->
       <div class="palette-label">
         <span>Символы интерьера (нажми, чтобы добавить):</span>
         <span id="itemCounter">0 / 9</span>
       </div>
       <div class="symbol-palette" id="symbolPalette"></div>
 
-      <!-- Кнопка перехода между этапами -->
       <button type="button" class="btn-primary" id="roomNextBtn">
         Зафиксировать текущую картину
       </button>
     </section>
 
-    <!-- ======================================================================
-         ЭКРАН 3: РАСШИФРОВКА И ФИЗИЧЕСКИЙ РИТУАЛ-ЯКОРЬ
-         ====================================================================== -->
     <section class="screen" id="screen3">
       <div class="velvet-card">
         <h2>Послание твоей Комнаты Души</h2>
@@ -864,15 +840,9 @@
     </section>
   </div>
 
-  <!-- Всплывающее уведомление -->
   <div class="toast" id="toastMsg"></div>
 
   <script>
-    /**
-     * ==========================================================================
-     * ДАННЫЕ СИМВОЛОВ ИНТЕРЬЕРА (ВЕКТОРНЫЕ SVG И МЕТАФОРЫ)
-     * ==========================================================================
-     */
     const SYMBOLS = [
       {
         id: 'hearth',
@@ -948,9 +918,6 @@
       }
     ];
 
-    /**
-     * Генератор чистых векторных SVG-иконок для каждого символа
-     */
     function getSymbolSVG(id) {
       const icons = {
         hearth: `<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#f3d59b" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2c.5 3.5-2 5.5-2 8.5a4 4 0 0 0 8 0c0-2.5-1.5-4.5-3-6.5-.5 1.5-1.5 2.5-3 2z"/><path d="M5 20h14"/><path d="M7 17h10"/></svg>`,
@@ -966,21 +933,15 @@
       return icons[id] || '';
     }
 
-    /**
-     * ==========================================================================
-     * СОСТОЯНИЕ ПРИЛОЖЕНИЯ
-     * ==========================================================================
-     */
     const state = {
       intent: 'Ясность в деле и деньгах',
-      phase: 'A', // 'A' — как сейчас, 'B' — трансформация
-      items: [],  // { id, x (%), y (%), shadow (bool), size ('md'|'lg') }
-      snapshotA: [], // Снимок состояния «Как сейчас» для сравнения
+      phase: 'A',
+      items: [],
+      snapshotA: [],
       selectedId: null,
       shareText: ''
     };
 
-    // DOM-элементы
     const stepIndicator = document.getElementById('stepIndicator');
     const screen1 = document.getElementById('screen1');
     const screen2 = document.getElementById('screen2');
@@ -995,9 +956,6 @@
     const inspActions = document.getElementById('inspActions');
     const toastMsg = document.getElementById('toastMsg');
 
-    /**
-     * Показ мягкого уведомления вместо alert()
-     */
     let toastTimer = null;
     function showToast(text) {
       toastMsg.textContent = text;
@@ -1008,9 +966,6 @@
       }, 2800);
     }
 
-    /**
-     * Переключение экранов
-     */
     function goToScreen(num) {
       [screen1, screen2, screen3].forEach(s => s.classList.remove('active'));
       if (num === 1) {
@@ -1026,11 +981,6 @@
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
-    /**
-     * ==========================================================================
-     * ЛОГИКА ЭКРАНА 1: НАСТРОЙКА НАМЕРЕНИЯ
-     * ==========================================================================
-     */
     document.getElementById('intentChips').addEventListener('click', (e) => {
       const btn = e.target.closest('.chip-btn');
       if (!btn) return;
@@ -1055,11 +1005,6 @@
       goToScreen(2);
     });
 
-    /**
-     * ==========================================================================
-     * ЛОГИКА ЭКРАНА 2: ИНТЕРАКТИВНЫЙ КОНСТРУКТОР КОМНАТЫ
-     * ==========================================================================
-     */
     function updatePhaseUI() {
       const phaseTag = document.getElementById('phaseTag');
       const phaseDesc = document.getElementById('phaseDesc');
@@ -1078,9 +1023,6 @@
       }
     }
 
-    /**
-     * Отрисовка палитры символов
-     */
     function renderPalette() {
       symbolPalette.innerHTML = '';
       SYMBOLS.forEach(sym => {
@@ -1098,9 +1040,6 @@
       itemCounter.textContent = `${state.items.length} / ${SYMBOLS.length}`;
     }
 
-    /**
-     * Добавление / выделение символа в комнате
-     */
     function toggleSymbolInRoom(id) {
       const existing = state.items.find(i => i.id === id);
       if (existing) {
@@ -1109,37 +1048,20 @@
         return;
       }
 
-      // Расставляем новые предметы с небольшим смещением, чтобы не перекрывались
       const offsetIndex = state.items.length;
       const presets = [
-        { x: 50, y: 50 },
-        { x: 30, y: 38 },
-        { x: 70, y: 40 },
-        { x: 34, y: 68 },
-        { x: 68, y: 66 },
-        { x: 50, y: 26 },
-        { x: 50, y: 74 },
-        { x: 22, y: 52 },
-        { x: 78, y: 52 }
+        { x: 50, y: 50 }, { x: 30, y: 38 }, { x: 70, y: 40 },
+        { x: 34, y: 68 }, { x: 68, y: 66 }, { x: 50, y: 26 },
+        { x: 50, y: 74 }, { x: 22, y: 52 }, { x: 78, y: 52 }
       ];
       const pos = presets[offsetIndex % presets.length];
 
-      state.items.push({
-        id,
-        x: pos.x,
-        y: pos.y,
-        shadow: false,
-        size: 'md'
-      });
-
+      state.items.push({ id, x: pos.x, y: pos.y, shadow: false, size: 'md' });
       selectItem(id);
       renderPalette();
       renderRoom();
     }
 
-    /**
-     * Выбор предмета и обновление инспектора
-     */
     function selectItem(id, skipRender = false) {
       state.selectedId = id;
       const item = state.items.find(i => i.id === id);
@@ -1165,7 +1087,6 @@
       }
     }
 
-    // Кнопки управления выбранным символом
     document.getElementById('toggleLightBtn').addEventListener('click', () => {
       const item = state.items.find(i => i.id === state.selectedId);
       if (!item) return;
@@ -1189,13 +1110,8 @@
       renderRoom();
     });
 
-    /**
-     * Отрисовка предметов на полотне комнаты + Drag & Drop (мышь и тач)
-     */
     function renderRoom() {
-      // Удаляем старые узлы предметов
       roomCanvas.querySelectorAll('.placed-item').forEach(el => el.remove());
-
       roomEmptyTip.style.opacity = state.items.length === 0 ? '1' : '0';
 
       state.items.forEach(item => {
@@ -1216,7 +1132,6 @@
           <span class="item-caption">${sym.name.split(' / ')[0]}</span>
         `;
 
-        // Инициализация перетаскивания (Pointer Events работают одинаково для мыши и пальца)
         el.addEventListener('pointerdown', (e) => {
           e.stopPropagation();
           selectItem(item.id, true);
@@ -1232,15 +1147,12 @@
             if (el.isConnected && typeof el.setPointerCapture === 'function') {
               el.setPointerCapture(pointerId);
             }
-          } catch (_) {
-            // Игнорируем, если захват указателя недоступен в текущем контексте
-          }
+          } catch (_) {}
 
           function onPointerMove(moveEvent) {
             if (moveEvent.pointerId !== pointerId) return;
             const dx = ((moveEvent.clientX - startX) / rect.width) * 100;
             const dy = ((moveEvent.clientY - startY) / rect.height) * 100;
-            // Ограничиваем в пределах комнаты с небольшим отступом
             item.x = Math.max(9, Math.min(91, origX + dx));
             item.y = Math.max(11, Math.min(89, origY + dy));
             el.style.left = `${item.x}%`;
@@ -1253,9 +1165,7 @@
               if (el.hasPointerCapture && el.hasPointerCapture(pointerId)) {
                 el.releasePointerCapture(pointerId);
               }
-            } catch (_) {
-              // Игнорируем
-            }
+            } catch (_) {}
             window.removeEventListener('pointermove', onPointerMove);
             window.removeEventListener('pointerup', onPointerUp);
             window.removeEventListener('pointercancel', onPointerUp);
@@ -1270,7 +1180,6 @@
       });
     }
 
-    // Снятие выделения при клике на пустое место комнаты
     roomCanvas.addEventListener('pointerdown', () => {
       if (state.selectedId) {
         state.selectedId = null;
@@ -1278,7 +1187,6 @@
       }
     });
 
-    // Переход из Этапа А в Этап Б, а затем на Экран 3
     document.getElementById('roomNextBtn').addEventListener('click', () => {
       if (state.items.length < 2) {
         showToast('Добавь хотя бы 2–3 символа в комнату, чтобы увидеть картину');
@@ -1286,7 +1194,6 @@
       }
 
       if (state.phase === 'A') {
-        // Сохраняем глубокую копию состояния «Как сейчас»
         state.snapshotA = JSON.parse(JSON.stringify(state.items));
         state.phase = 'B';
         updatePhaseUI();
@@ -1297,11 +1204,6 @@
       }
     });
 
-    /**
-     * ==========================================================================
-     * ЭКРАН 3: СИСТЕМНО-СИМВОЛИЧЕСКИЙ АНАЛИЗ И ГЕНЕРАЦИЯ РИТУАЛА
-     * ==========================================================================
-     */
     function distanceToCenter(item) {
       const dx = item.x - 50;
       const dy = item.y - 50;
@@ -1316,21 +1218,18 @@
       const snapMap = new Map(state.snapshotA.map(i => [i.id, i]));
       const currMap = new Map(state.items.map(i => [i.id, i]));
 
-      // 1. Что добавилось на этапе трансформации
       const added = state.items.filter(i => !snapMap.has(i.id));
       if (added.length > 0) {
         const names = added.map(i => SYMBOLS.find(s => s.id === i.id).name).join(', ');
         insights.push(`В твоём пространстве появились новые ресурсы: <strong>${names}</strong>. Психика готова впустить это качество в твою реальность.`);
       }
 
-      // 2. Что было убрано
       const removed = state.snapshotA.filter(i => !currMap.has(i.id));
       if (removed.length > 0) {
         const names = removed.map(i => SYMBOLS.find(s => s.id === i.id).name).join(', ');
         insights.push(`Ты освободил(а) комнату от лишнего: убраны <strong>${names}</strong>. Освободившееся место — это энергия для движения вперёд.`);
       }
 
-      // 3. Что вышло из тени на свет
       const litUp = state.items.filter(i => {
         const prev = snapMap.get(i.id);
         return prev && prev.shadow && !i.shadow;
@@ -1340,7 +1239,6 @@
         insights.push(`Вышли из тени на свет: <strong>${names}</strong>. Ты перестаёшь прятать эту часть себя и возвращаешь ей голос.`);
       }
 
-      // 4. Находим главный символ (ближайший к центру Ядра и на свету)
       const activeItems = state.items.filter(i => !i.shadow);
       const pool = activeItems.length > 0 ? activeItems : state.items;
       const sortedByCenter = [...pool].sort((a, b) => {
@@ -1354,15 +1252,12 @@
 
       insights.push(`Главным центром силы твоей обновлённой комнаты стал символ <strong>«${coreSym.name}»</strong>.`);
 
-      // Если пользователь только передвинул предметы без добавления/удаления
       if (added.length === 0 && removed.length === 0 && litUp.length === 0) {
         insights.unshift('Ты бережно перестроил(а) внутреннюю геометрию: те же элементы встали на свои места, и напряжение сменилось гармонией.');
       }
 
-      const listEl = document.getElementById('transformationInsights');
-      listEl.innerHTML = insights.map(text => `<li>${text}</li>`).join('');
+      document.getElementById('transformationInsights').innerHTML = insights.map(text => `<li>${text}</li>`).join('');
 
-      // Глубинная интерпретация в стиле вебинара
       const litCount = state.items.filter(i => !i.shadow).length;
       const shadowCount = state.items.filter(i => i.shadow).length;
       let atmosphereNote = '';
@@ -1377,12 +1272,10 @@
       document.getElementById('deepInterpretation').textContent =
         `${coreSym.centerInsight} ${atmosphereNote} Помни: когда внутри комнаты души становится легко дышать, внешний «планетарий» неизбежно начинает перестраивать декорации твоей жизни под этот новый образ.`;
 
-      // Физический ритуал-якорь
       document.getElementById('physicalRitualText').textContent = coreSym.ritual;
 
-      // Формируем красивый текст для копирования в чат участников
       state.shareText = [
-        `✨ Мой «Символический интерьер: Комната Души»`,
+        `✨ Мой «Символический интерьер: Комната Души v2.0»`,
         `🎯 Запрос: ${state.intent}`,
         `🕯 Главный символ новой опоры: ${coreSym.emoji} ${coreSym.name}`,
         `🌿 Инсайт: ${coreSym.centerInsight}`,
@@ -1392,17 +1285,10 @@
 
     function escapeHtml(str) {
       return str.replace(/[&<>"']/g, (m) => ({
-        '&': '&amp;',
-        '<': '&lt;',
-        '>': '&gt;',
-        '"': '&quot;',
-        "'": '&#39;'
+        '&': '&', '<': '<', '>': '>', '"': '"', "'": '''
       }[m]));
     }
 
-    /**
-     * Копирование результата в буфер обмена (через безопасный fallback execCommand)
-     */
     document.getElementById('copyShareBtn').addEventListener('click', () => {
       const textarea = document.createElement('textarea');
       textarea.value = state.shareText;
@@ -1419,9 +1305,6 @@
       document.body.removeChild(textarea);
     });
 
-    /**
-     * Сброс и повторное прохождение
-     */
     document.getElementById('restartBtn').addEventListener('click', () => {
       state.phase = 'A';
       state.items = [];
