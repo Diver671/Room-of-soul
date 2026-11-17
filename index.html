@@ -1,98 +1,297 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>Символический интерьер: Комната Души</title>
-  <style>
-    :root {
-      --bg-deep: #141e1b;
-      --bg-velvet: #1d2b26;
-      --bg-card: rgba(29, 43, 38, 0.9);
-      --gold: #d4a359;
-      --gold-light: #f3d59b;
-      --gold-glow: rgba(212, 163, 89, 0.28);
-      --cream: #f5efe6;
-      --cream-muted: rgba(245, 239, 230, 0.72);
-      --cream-dim: rgba(245, 239, 230, 0.45);
-      --border-subtle: rgba(212, 163, 89, 0.22);
-      --border-strong: rgba(243, 213, 155, 0.55);
-      --shadow-deep: 0 18px 42px rgba(6, 12, 10, 0.65);
-      --radius-lg: 22px;
-      --radius-md: 14px;
-      --radius-sm: 10px;
-      --transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Комната Души — Версия 2.0</title>
+    <style>
+        :root {
+            --bg-color: #0d0f14;
+            --card-bg: #161923;
+            --accent-amber: #f5a623;
+            --accent-amber-hover: #ffb833;
+            --text-main: #e2e8f0;
+            --text-muted: #94a3b8;
+            --border-color: #2a2f42;
+        }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
 
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-      background-color: var(--bg-deep);
-      background-image:
-        radial-gradient(circle at 18% 12%, rgba(212, 163, 89, 0.12) 0%, transparent 45%),
-        radial-gradient(circle at 85% 88%, rgba(46, 79, 68, 0.28) 0%, transparent 50%),
-        linear-gradient(160deg, #111917 0%, #182521 55%, #121b18 100%);
-      color: var(--cream);
-      min-height: 100dvh;
-      display: flex;
-      justify-content: center;
-      align-items: flex-start;
-      padding: 14px;
-      overflow-x: hidden;
-      line-height: 1.5;
-    }
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
 
-    .app-shell { width: 100%; max-width: 780px; min-height: calc(100dvh - 28px); display: flex; flex-direction: column; position: relative; z-index: 1; }
+        header {
+            text-align: center;
+            margin-bottom: 24px;
+        }
 
-    .app-header { display: flex; align-items: center; justify-content: space-between; padding: 6px 4px 14px; border-bottom: 1px solid var(--border-subtle); margin-bottom: 16px; gap: 12px; }
-    .brand { display: flex; align-items: center; gap: 10px; }
-    .brand-emblem { width: 34px; height: 34px; border-radius: 50%; background: radial-gradient(circle, rgba(243, 213, 155, 0.25), rgba(212, 163, 89, 0.06)); border: 1px solid var(--border-strong); display: flex; align-items: center; justify-content: center; box-shadow: 0 0 18px var(--gold-glow); flex-shrink: 0; }
-    .brand-title { font-size: 0.95rem; font-weight: 600; letter-spacing: 0.03em; color: var(--gold-light); }
-    .brand-sub { font-size: 0.72rem; color: var(--cream-dim); display: block; }
-    .step-badge { font-size: 0.74rem; padding: 5px 12px; border-radius: 999px; background: rgba(212, 163, 89, 0.12); border: 1px solid var(--border-subtle); color: var(--gold-light); white-space: nowrap; }
+        header h1 {
+            font-size: 1.75rem;
+            color: var(--accent-amber);
+            margin-bottom: 8px;
+            letter-spacing: 0.5px;
+        }
 
-    .screen { display: none; flex-direction: column; flex: 1; animation: fadeSlideUp 0.4s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
-    .screen.active { display: flex; }
+        header p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
 
-    @keyframes fadeSlideUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+        .container {
+            width: 100%;
+            max-width: 800px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
 
-    .velvet-card { background: var(--bg-card); backdrop-filter: blur(12px); border: 1px solid var(--border-subtle); border-radius: var(--radius-lg); padding: 22px 18px; box-shadow: var(--shadow-deep); }
-    h1, h2, h3 { font-weight: 600; color: var(--gold-light); }
-    h1 { font-size: 1.5rem; margin-bottom: 12px; }
-    h2 { font-size: 1.18rem; margin-bottom: 8px; }
-    .lead-text { color: var(--cream-muted); font-size: 0.94rem; margin-bottom: 18px; }
+        .panel {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+        }
 
-    .breath-orb { width: 64px; height: 64px; margin: 0 auto 16px; border-radius: 50%; background: radial-gradient(circle at 35% 35%, var(--gold-light), var(--gold) 65%, rgba(212, 163, 89, 0.15)); box-shadow: 0 0 32px rgba(212, 163, 89, 0.4); animation: breathe 5.5s ease-in-out infinite; display: flex; align-items: center; justify-content: center; color: var(--bg-deep); }
-    @keyframes breathe { 0%, 100% { transform: scale(0.95); box-shadow: 0 0 20px rgba(212, 163, 89, 0.25); } 50% { transform: scale(1.05); box-shadow: 0 0 38px rgba(243, 213, 155, 0.6); } }
+        .panel h2 {
+            font-size: 1.2rem;
+            margin-bottom: 12px;
+            color: var(--accent-amber);
+        }
 
-    .intent-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 14px; }
-    .chip-btn { background: rgba(20, 30, 27, 0.75); border: 1px solid var(--border-subtle); color: var(--cream); padding: 9px 13px; border-radius: var(--radius-md); font-size: 0.84rem; cursor: pointer; transition: var(--transition); text-align: left; }
-    .chip-btn:hover, .chip-btn.selected { border-color: var(--gold-light); background: rgba(212, 163, 89, 0.16); color: var(--gold-light); }
+        .symbols-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 12px;
+        }
 
-    .intent-input-wrap { margin-bottom: 20px; }
-    .intent-label { display: block; font-size: 0.78rem; color: var(--cream-dim); margin-bottom: 6px; }
-    .intent-input { width: 100%; background: rgba(15, 23, 20, 0.85); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: 12px 14px; color: var(--cream); font-size: 0.94rem; outline: none; transition: var(--transition); }
-    .intent-input:focus { border-color: var(--gold-light); box-shadow: 0 0 0 3px rgba(212, 163, 89, 0.15); }
+        .symbol-card {
+            background: #1e2230;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 12px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            user-select: none;
+        }
 
-    .btn-primary { width: 100%; padding: 14px 18px; border-radius: var(--radius-md); border: none; background: linear-gradient(135deg, #e2b872 0%, #c69043 100%); color: #131c19; font-weight: 700; font-size: 0.96rem; cursor: pointer; box-shadow: 0 6px 20px rgba(212, 163, 89, 0.3); transition: var(--transition); display: flex; align-items: center; justify-content: center; gap: 8px; }
-    .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 10px 24px rgba(243, 213, 155, 0.4); }
+        .symbol-card:hover {
+            border-color: var(--accent-amber);
+            transform: translateY(-2px);
+        }
 
-    .btn-secondary { padding: 12px 16px; border-radius: var(--radius-md); border: 1px solid var(--border-strong); background: rgba(29, 43, 38, 0.7); color: var(--gold-light); font-weight: 600; font-size: 0.88rem; cursor: pointer; transition: var(--transition); }
-    .btn-secondary:hover { background: rgba(212, 163, 89, 0.15); }
+        .symbol-card.selected {
+            background: rgba(245, 166, 35, 0.15);
+            border-color: var(--accent-amber);
+        }
 
-    .phase-banner { background: rgba(29, 43, 38, 0.9); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: 11px 14px; margin-bottom: 10px; display: flex; flex-direction: column; gap: 3px; }
-    .phase-tag { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--gold); font-weight: 700; }
-    .phase-desc { font-size: 0.85rem; color: var(--cream-muted); }
+        .canvas-area {
+            background: #11141d;
+            border: 2px dashed var(--border-color);
+            border-radius: 12px;
+            min-height: 250px;
+            display: flex;
+            flex-wrap: wrap;
+            align-content: flex-start;
+            gap: 12px;
+            padding: 16px;
+            position: relative;
+        }
 
-    .room-wrapper { position: relative; width: 100%; aspect-ratio: 4 / 3; min-height: 280px; max-height: 400px; border-radius: var(--radius-lg); background: radial-gradient(circle at 50% 50%, rgba(243, 213, 155, 0.12) 0%, rgba(212, 163, 89, 0.03) 35%, rgba(15, 23, 20, 0.95) 85%), repeating-linear-gradient(0deg, rgba(212, 163, 89, 0.035) 0px, rgba(212, 163, 89, 0.035) 1px, transparent 1px, transparent 32px), repeating-linear-gradient(90deg, rgba(212, 163, 89, 0.035) 0px, rgba(212, 163, 89, 0.035) 1px, transparent 1px, transparent 32px); border: 1.5px solid var(--border-strong); box-shadow: inset 0 0 45px rgba(8, 14, 12, 0.8), var(--shadow-deep); overflow: hidden; touch-action: none; user-select: none; margin-bottom: 10px; }
-    .room-center-ring { position: absolute; top: 50%; left: 50%; width: 42%; aspect-ratio: 1 / 1; transform: translate(-50%, -50%); border-radius: 50%; border: 1px dashed rgba(243, 213, 155, 0.22); background: radial-gradient(circle, rgba(243, 213, 155, 0.06) 0%, transparent 70%); pointer-events: none; display: flex; align-items: center; justify-content: center; }
-    .room-center-label { font-size: 0.66rem; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(243, 213, 155, 0.32); text-align: center; pointer-events: none; }
-    .room-zone-hint { position: absolute; font-size: 0.64rem; color: rgba(245, 239, 230, 0.24); pointer-events: none; letter-spacing: 0.04em; }
-    .zone-top { top: 6px; left: 50%; transform: translateX(-50%); }
-    .zone-bottom { bottom: 6px; left: 50%; transform: translateX(-50%); }
-    .zone-left { left: 8px; top: 50%; transform: translateY(-50%) rotate(-90deg); }
-    .zone-right { right: 8px; top: 50%; transform: translateY(-50%) rotate(90deg); }
-    .room-empty-tip { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; text-align: center; padding: 20px; color: var(--cream-dim); font-size: 0.86rem; pointer-events: none; transition: opacity 0.3s ease; }
+        .canvas-placeholder {
+            color: var(--text-muted);
+            margin: auto;
+            text-align: center;
+            font-size: 0.95rem;
+            pointer-events: none;
+        }
 
-    .placed-item { position: absolute; transform: translate
+        .placed-item {
+            background: #1e2230;
+            border: 1px solid var(--accent-amber);
+            border-radius: 8px;
+            padding: 10px 16px;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .placed-item button {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        .placed-item button:hover {
+            color: #ff5252;
+        }
+
+        .btn {
+            background-color: var(--accent-amber);
+            color: #0d0f14;
+            border: none;
+            border-radius: 8px;
+            padding: 12px 20px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+            width: 100%;
+        }
+
+        .btn:hover {
+            background-color: var(--accent-amber-hover);
+        }
+
+        .result-box {
+            background: #161923;
+            border: 1px solid var(--accent-amber);
+            border-radius: 12px;
+            padding: 20px;
+            display: none;
+            animation: fadeIn 0.4s ease;
+        }
+
+        .result-box h3 {
+            color: var(--accent-amber);
+            margin-bottom: 10px;
+        }
+
+        .result-box p {
+            line-height: 1.5;
+            color: var(--text-main);
+            margin-bottom: 12px;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(4px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Комната Души</h1>
+        <p>Интерактивная метафорическая расстановка (Версия 2.0)</p>
+    </header>
+
+    <div class="container">
+        <!-- Панель выбора символов -->
+        <div class="panel">
+            <h2>1. Выберите элементы для расстановки</h2>
+            <div class="symbols-grid" id="symbolsContainer">
+                <!-- Генерируются скриптом -->
+            </div>
+        </div>
+
+        <!-- Холст расстановки -->
+        <div class="panel">
+            <h2>2. Ваше пространство</h2>
+            <div class="canvas-area" id="canvasArea">
+                <div class="canvas-placeholder" id="placeholder">Выберите элементы выше, чтобы разместить их в Комнате Души</div>
+            </div>
+        </div>
+
+        <!-- Кнопка анализа -->
+        <button class="btn" id="analyzeBtn" style="display: none;">Получить инсайт и ритуал-якорь</button>
+
+        <!-- Блок результата -->
+        <div class="result-box" id="resultBox">
+            <h3>Инсайт расстановки</h3>
+            <p id="insightText"></p>
+            <h3 style="margin-top: 16px;">Физический ритуал-якорь</h3>
+            <p id="ritualText"></p>
+        </div>
+    </div>
+
+    <script>
+        const symbols = [
+            { id: 1, name: "🕯️ Очаг / Свеча", category: "Тепло и ресурс" },
+            { id: 2, name: "🪞 Старинное зеркало", category: "Отражение сути" },
+            { id: 3, name: "🪑 Удобное кресло", category: "Опора и отдых" },
+            { id: 4, name: "🚪 Приоткрытая дверь", category: "Путь и изменения" },
+            { id: 5, name: "🪴 Живое растение", category: "Рост и развитие" },
+            { id: 6, name: "⏳ Песочные часы", category: "Время и процессы" }
+        ];
+
+        let selectedSymbols = [];
+
+        const symbolsContainer = document.getElementById('symbolsContainer');
+        const canvasArea = document.getElementById('canvasArea');
+        const placeholder = document.getElementById('placeholder');
+        const analyzeBtn = document.getElementById('analyzeBtn');
+        const resultBox = document.getElementById('resultBox');
+        const insightText = document.getElementById('insightText');
+        const ritualText = document.getElementById('ritualText');
+
+        function renderSymbols() {
+            symbolsContainer.innerHTML = '';
+            symbols.forEach(sym => {
+                const card = document.createElement('div');
+                card.className = `symbol-card ${selectedSymbols.includes(sym.id) ? 'selected' : ''}`;
+                card.innerHTML = `<strong>${sym.name}</strong><br><small style="color:var(--text-muted);">${sym.category}</small>`;
+                card.onclick = () => toggleSymbol(sym.id);
+                symbolsContainer.appendChild(card);
+            });
+        }
+
+        function toggleSymbol(id) {
+            const index = selectedSymbols.indexOf(id);
+            if (index > -1) {
+                selectedSymbols.splice(index, 1);
+            } else {
+                selectedSymbols.push(id);
+            }
+            renderCanvas();
+            renderSymbols();
+        }
+
+        function renderCanvas() {
+            canvasArea.innerHTML = '';
+            if (selectedSymbols.length === 0) {
+                canvasArea.appendChild(placeholder);
+                analyzeBtn.style.display = 'none';
+                resultBox.style.display = 'none';
+                return;
+            }
+
+            selectedSymbols.forEach(id => {
+                const sym = symbols.find(s => s.id === id);
+                const item = document.createElement('div');
+                item.className = 'placed-item';
+                item.innerHTML = `<span>${sym.name}</span> <button onclick="event.stopPropagation(); toggleSymbol(${sym.id})">×</button>`;
+                canvasArea.appendChild(item);
+            });
+
+            analyzeBtn.style.display = 'block';
+        }
+
+        analyzeBtn.onclick = () => {
+            resultBox.style.display = 'block';
+            insightText.textContent = "Ваша текущая расстановка отражает внутренний баланс между потребностью в безопасности и готовностью к внутреннему обновлению. Выбранные объекты показывают фокус внимания на текущих внутренних опорах.";
+            ritualText.textContent = "Зажгите настоящую свечу или уделите 3 минуты тишине в удобном кресле, сделав три глубоких вдоха. Почувствуйте телесную плотность и заземление в моменте «здесь и сейчас».";
+            resultBox.scrollIntoView({ behavior: 'smooth' });
+        };
+
+        renderSymbols();
+    </script>
+</body>
+</html>
