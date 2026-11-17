@@ -2,14 +2,14 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Комната Души — Версия 1.0</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Комната Души — Версия 2.0 (Синхронизированная)</title>
     <style>
         :root {
             --bg-velvet: #0f0f13;
             --gold: #d4af37;
             --gold-light: #f3e5ab;
-            --card-bg: rgba(25, 25, 35, 0.85);
+            --card-bg: rgba(25, 25, 35, 0.9);
             --text-main: #f0f0f5;
             --text-muted: #9ba1a6;
         }
@@ -19,6 +19,7 @@
             margin: 0;
             padding: 0;
             font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            touch-action: none; /* Предотвращаем скролл страницы на мобилках при перетаскивании */
         }
 
         body {
@@ -29,24 +30,7 @@
             flex-direction: column;
             align-items: center;
             padding: 16px;
-        }
-
-        .header {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-
-        .header h1 {
-            color: var(--gold);
-            font-size: 24px;
-            font-weight: 600;
-            letter-spacing: 0.5px;
-            margin-bottom: 4px;
-        }
-
-        .header p {
-            color: var(--text-muted);
-            font-size: 13px;
+            overflow: hidden;
         }
 
         .container {
@@ -54,61 +38,79 @@
             max-width: 480px;
             display: flex;
             flex-direction: column;
-            gap: 16px;
+            gap: 12px;
+            height: 100vh;
+            max-height: 850px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 4px;
+        }
+
+        .header h1 {
+            color: var(--gold);
+            font-size: 22px;
+            font-weight: 600;
+        }
+
+        .header p {
+            color: var(--text-muted);
+            font-size: 12px;
         }
 
         .panel {
             background: var(--card-bg);
             border: 1px solid rgba(212, 175, 55, 0.2);
-            border-radius: 16px;
-            padding: 16px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+            border-radius: 14px;
+            padding: 12px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
         }
 
         .panel-title {
-            font-size: 14px;
+            font-size: 13px;
             color: var(--gold-light);
             text-transform: uppercase;
             letter-spacing: 1px;
-            margin-bottom: 12px;
+            margin-bottom: 8px;
             font-weight: 600;
         }
 
         .elements-grid {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 8px;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 6px;
         }
 
         .element-btn {
             background: rgba(255, 255, 255, 0.05);
             border: 1px solid rgba(212, 175, 55, 0.3);
-            border-radius: 10px;
-            padding: 10px 12px;
+            border-radius: 8px;
+            padding: 8px;
             color: var(--text-main);
-            font-size: 13px;
+            font-size: 12px;
             cursor: pointer;
             display: flex;
             align-items: center;
-            gap: 8px;
+            justify-content: center;
+            gap: 4px;
             transition: all 0.2s ease;
         }
 
-        .element-btn:hover {
-            background: rgba(212, 175, 55, 0.15);
+        .element-btn:hover, .element-btn:active {
+            background: rgba(212, 175, 55, 0.2);
             border-color: var(--gold);
-            transform: translateY(-1px);
         }
 
         .room-space {
-            width: 100%;
-            height: 320px;
+            flex-grow: 1;
             background: radial-gradient(circle at center, #1a1a24 0%, #0a0a0f 100%);
             border: 2px dashed rgba(212, 175, 55, 0.3);
-            border-radius: 50%;
+            border-radius: 16px;
             position: relative;
             overflow: hidden;
-            margin: 0 auto;
+            width: 100%;
+            min-height: 340px;
         }
 
         .room-center-mark {
@@ -120,24 +122,25 @@
             height: 6px;
             background-color: var(--gold);
             border-radius: 50%;
-            opacity: 0.5;
+            opacity: 0.4;
         }
 
         .placed-item {
             position: absolute;
-            background: rgba(212, 175, 55, 0.2);
+            background: rgba(25, 25, 35, 0.95);
             border: 1px solid var(--gold);
             color: var(--gold-light);
-            padding: 6px 10px;
-            border-radius: 8px;
-            font-size: 12px;
+            padding: 8px 12px;
+            border-radius: 10px;
+            font-size: 13px;
             cursor: grab;
             user-select: none;
             transform: translate(-50%, -50%);
             display: flex;
             align-items: center;
             gap: 6px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            box-shadow: 0 4px 16px rgba(0,0,0,0.5);
+            z-index: 10;
         }
 
         .placed-item:active {
@@ -145,8 +148,6 @@
         }
 
         .footer {
-            margin-top: auto;
-            padding-top: 16px;
             text-align: center;
             font-size: 11px;
             color: var(--text-muted);
@@ -158,31 +159,28 @@
     <div class="container">
         <div class="header">
             <h1>Комната Души</h1>
-            <p>Версия 1.0 • Пространство расстановок</p>
+            <p>Версия 2.0 • Расширенное поле расстановок</p>
         </div>
 
         <div class="panel">
-            <div class="panel-title">Элементы расстановки</div>
+            <div class="panel-title">Элементы и фигуры</div>
             <div class="elements-grid">
                 <button class="element-btn" onclick="addElement('🕯 Очаг')">🕯 Очаг</button>
                 <button class="element-btn" onclick="addElement('🪞 Зеркало')">🪞 Зеркало</button>
                 <button class="element-btn" onclick="addElement('🪑 Кресло')">🪑 Кресло</button>
                 <button class="element-btn" onclick="addElement('🚪 Дверь')">🚪 Дверь</button>
-                <button class="element-btn" onclick="addElement('🌿 Растение')">🌿 Растение</button>
+                <button class="element-btn" onclick="addElement('🌿 Дерево')">🌿 Дерево</button>
                 <button class="element-btn" onclick="addElement('⏳ Часы')">⏳ Часы</button>
             </div>
         </div>
 
-        <div class="panel">
-            <div class="panel-title">Пространство комнаты</div>
-            <div class="room-space" id="roomSpace" onclick="handleRoomClick(event)">
-                <div class="room-center-mark"></div>
-            </div>
+        <div class="panel room-space" id="roomSpace">
+            <div class="room-center-mark"></div>
         </div>
-    </div>
 
-    <div class="footer">
-        @SoulRoomBot
+        <div class="footer">
+            @SoulRoomBot • Синхронизировано для Web & Telegram
+        </div>
     </div>
 
     <script>
@@ -192,43 +190,55 @@
             item.className = 'placed-item';
             item.innerText = name;
             
-            // Случайные начальные координаты ближе к центру
             const rect = room.getBoundingClientRect();
-            const x = rect.width / 2 + (Math.random() * 60 - 30);
-            const y = rect.height / 2 + (Math.random() * 60 - 30);
+            const x = rect.width / 2 + (Math.random() * 40 - 20);
+            const y = rect.height / 2 + (Math.random() * 40 - 20);
             
             item.style.left = x + 'px';
             item.style.top = y + 'px';
 
-            // Простейшее перетаскивание мышей / пальцем
-            let isDragging = false;
-            item.onmousedown = item.ontouchstart = function(e) {
-                isDragging = true;
-                e.stopPropagation();
-            };
+            let activeItem = null;
+            let startX = 0, startY = 0;
 
-            document.onmousemove = document.ontouchmove = function(e) {
-                if (!isDragging) return;
-                const clientX = e.touches ? e.touches[0].clientX : e.clientX;
-                const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+            function onPointerDown(e) {
+                activeItem = item;
+                const clientX = e.clientX || (e.touches ? e.touches[0].clientX : 0);
+                const clientY = e.clientY || (e.touches ? e.touches[0].clientY : 0);
+                
+                const itemRect = item.getBoundingClientRect();
+                startX = clientX - itemRect.left - itemRect.width / 2;
+                startY = clientY - itemRect.top - itemRect.height / 2;
+                
+                document.addEventListener('pointermove', onPointerMove);
+                document.addEventListener('pointerup', onPointerUp);
+                e.preventDefault();
+            }
+
+            function onPointerMove(e) {
+                if (!activeItem) return;
+                const clientX = e.clientX || (e.touches ? e.touches[0].clientX : 0);
+                const clientY = e.clientY || (e.touches ? e.touches[0].clientY : 0);
                 const roomRect = room.getBoundingClientRect();
-                
-                let relX = clientX - roomRect.left;
-                let relY = clientY - roomRect.top;
-                
-                item.style.left = relX + 'px';
-                item.style.top = relY + 'px';
-            };
 
-            document.onmouseup = document.ontouchend = function() {
-                isDragging = false;
-            };
+                let newX = clientX - roomRect.left - startX;
+                let newY = clientY - roomRect.top - startY;
 
+                // Ограничиваем перемещение внутри контейнера комнаты
+                newX = Math.max(30, Math.min(roomRect.width - 30, newX));
+                newY = Math.max(30, Math.min(roomRect.height - 30, newY));
+
+                activeItem.style.left = newX + 'px';
+                activeItem.style.top = newY + 'px';
+            }
+
+            function onPointerUp() {
+                activeItem = null;
+                document.removeEventListener('pointermove', onPointerMove);
+                document.removeEventListener('pointerup', onPointerUp);
+            }
+
+            item.addEventListener('pointerdown', onPointerDown);
             room.appendChild(item);
-        }
-
-        function handleRoomClick(e) {
-            // Заглушка для клика по пространству
         }
     </script>
 </body>
